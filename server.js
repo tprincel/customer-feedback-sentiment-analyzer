@@ -210,6 +210,55 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Authentication: Login Endpoint
+app.post('/api/auth/login', (req, res) => {
+  const { identifier, password } = req.body;
+  if (!identifier || !password) {
+    return res.status(400).json({ error: 'Please enter your email or phone number and password.' });
+  }
+
+  // Derive display name from email or phone
+  let displayName = identifier.includes('@') ? identifier.split('@')[0] : 'User ' + identifier.slice(-4);
+  displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+  res.json({
+    success: true,
+    user: {
+      name: displayName,
+      identifier: identifier.trim(),
+      role: 'Product Specialist',
+      token: 'jwt_session_' + Date.now()
+    }
+  });
+});
+
+// Authentication: Sign Up Endpoint
+app.post('/api/auth/signup', (req, res) => {
+  const { name, identifier, password } = req.body;
+  if (!identifier || !password) {
+    return res.status(400).json({ error: 'Please enter your email or phone number and a password.' });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
+  }
+
+  const displayName = name && name.trim() ? name.trim() : (
+    identifier.includes('@') ? identifier.split('@')[0] : 'User ' + identifier.slice(-4)
+  );
+
+  res.json({
+    success: true,
+    user: {
+      name: displayName,
+      identifier: identifier.trim(),
+      role: 'Product Specialist',
+      token: 'jwt_session_' + Date.now()
+    }
+  });
+});
+
+
 // Live Single Review Analysis
 app.post('/api/analyze', async (req, res) => {
   try {
