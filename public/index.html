@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Feedback Sentiment & Topic Analytics</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <!-- Top Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-slate-900 leading-tight">SentimentPulse AI</h1>
+          <p class="text-xs text-slate-500">Customer Feedback & Topic Intelligence</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div id="hf-status-badge" class="flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>HF Inference Active</span>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded bg-slate-100 text-slate-600 border border-slate-200 font-mono">v1.2</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- KPI Summary Row -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-500">Real-time KPI Metrics</h2>
+        <span id="kpi-updated-time" class="text-xs text-slate-400">Awaiting analysis</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Card 1: Total Reviews -->
+        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Processed</span>
+            <div class="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+              <i data-lucide="message-square" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline space-x-2">
+            <span id="kpi-total" class="text-3xl font-extrabold text-slate-900">0</span>
+            <span class="text-xs text-slate-400">customer reviews</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-2 flex items-center">
+            <i data-lucide="layers" class="w-3.5 h-3.5 mr-1 text-slate-400"></i>
+            <span>Active dataset sample</span>
+          </p>
+        </div>
+
+        <!-- Card 2: Positive Sentiment -->
+        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Positive Share</span>
+            <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <i data-lucide="smile" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline space-x-2">
+            <span id="kpi-positive" class="text-3xl font-extrabold text-emerald-600">0%</span>
+            <span id="kpi-positive-count" class="text-xs text-slate-400">(0 reviews)</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+            <div id="kpi-positive-bar" class="bg-emerald-500 h-1.5 rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Card 3: Negative Sentiment -->
+        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Negative Share</span>
+            <div class="w-9 h-9 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+              <i data-lucide="frown" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline space-x-2">
+            <span id="kpi-negative" class="text-3xl font-extrabold text-rose-600">0%</span>
+            <span id="kpi-negative-count" class="text-xs text-slate-400">(0 reviews)</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+            <div id="kpi-negative-bar" class="bg-rose-500 h-1.5 rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Card 4: High-Urgency Alerts -->
+        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition border-l-4 border-l-amber-500">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Urgent Alerts</span>
+            <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline space-x-2">
+            <span id="kpi-urgency" class="text-3xl font-extrabold text-amber-600">0</span>
+            <span class="text-xs text-slate-400">action required</span>
+          </div>
+          <p class="text-xs text-amber-700 mt-2 flex items-center">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5 mr-1"></i>
+            <span>Defects, returns & safety</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Grid: Live Single Testing & Batch Dataset Loading -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left Column (5 cols): Live Single Review Test -->
+      <section class="lg:col-span-5 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <div class="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+                <i data-lucide="cpu" class="w-5 h-5"></i>
+              </div>
+              <h2 class="text-base font-bold text-slate-900">Live Review Analyzer</h2>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-mono">Hugging Face</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-4">Test customer feedback on-the-fly to get instant sentiment classification, topic detection, and urgency scoring.</p>
+
+          <form id="single-analysis-form" class="space-y-4">
+            <div>
+              <label for="review-input" class="block text-xs font-medium text-slate-700 mb-1">Customer Review Text</label>
+              <textarea
+                id="review-input"
+                rows="4"
+                required
+                placeholder="Type or paste customer feedback here (e.g. 'The cooler works wonderfully and cooling is very fast, but delivery was late.')..."
+                class="w-full text-sm rounded-xl border border-slate-300 p-3 shadow-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition"
+              ></textarea>
+            </div>
+
+            <!-- Quick Presets -->
+            <div>
+              <span class="text-xs text-slate-500 block mb-1 font-medium">Quick Test Prompts:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" class="preset-btn text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition" data-text="Super! great cooler excellent air flow and for this price its so amazing and unbelievable just love it">
+                  ⭐ Positive (Cooler)
+                </button>
+                <button type="button" class="preset-btn text-xs px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition" data-text="Useless product, very bad product its only a noisy fan and leaked water everywhere!">
+                  🚨 Negative (Defective)
+                </button>
+                <button type="button" class="preset-btn text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition" data-text="The product quality is good but power of air is decent, okay for the price.">
+                  ⚖️ Neutral (Fair)
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="analyze-btn"
+              class="w-full flex items-center justify-center space-x-2 py-2.5 px-4 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl shadow-sm hover:shadow transition disabled:opacity-50"
+            >
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              <span>Analyze Sentiment & Topic</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Live Analysis Result Container -->
+        <div id="single-result-card" class="mt-6 pt-5 border-t border-slate-200 hidden">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold uppercase text-slate-500 tracking-wider">Analysis Result</span>
+            <span id="result-timestamp" class="text-xs text-slate-400"></span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">Sentiment</span>
+              <span id="res-sentiment-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold"></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">Model Confidence</span>
+              <span id="res-confidence" class="text-xs font-bold text-slate-800"></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">Detected Topic</span>
+              <span id="res-topic" class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-100 text-blue-800"></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">Urgency Rating</span>
+              <span id="res-urgency" class="text-xs font-semibold px-2 py-0.5 rounded"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column (7 cols): Batch Processing & CSV Upload -->
+      <section class="lg:col-span-7 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <div class="p-2 rounded-lg bg-emerald-50 text-emerald-600">
+                <i data-lucide="database" class="w-5 h-5"></i>
+              </div>
+              <h2 class="text-base font-bold text-slate-900">Dataset Batch Pipeline</h2>
+            </div>
+            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-medium">Batch Engine</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-6">Process reviews in batch directly from the root <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">dataset.csv</code> or upload a custom CSV dataset.</p>
+
+          <!-- Action Cards Container -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Option 1: Load from Root dataset.csv -->
+            <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center space-x-2 mb-2">
+                  <i data-lucide="hard-drive" class="w-5 h-5 text-sky-600"></i>
+                  <h3 class="text-sm font-bold text-slate-900">Root dataset.csv</h3>
+                </div>
+                <p class="text-xs text-slate-500 mb-4">Reads the Flipkart customer review dataset directly from project directory.</p>
+              </div>
+              <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                  <label for="batch-limit-select" class="text-xs text-slate-600 font-medium">Limit:</label>
+                  <select id="batch-limit-select" class="text-xs rounded-lg border border-slate-300 py-1 px-2 bg-white">
+                    <option value="5">5 reviews (Fast)</option>
+                    <option value="10" selected>10 reviews</option>
+                    <option value="15">15 reviews</option>
+                    <option value="25">25 reviews</option>
+                  </select>
+                </div>
+                <button
+                  id="btn-run-root-dataset"
+                  class="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition"
+                >
+                  <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                  <span>Process Root Dataset</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Option 2: Upload Custom CSV -->
+            <div class="p-5 rounded-xl border border-dashed border-slate-300 bg-white hover:border-sky-400 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center space-x-2 mb-2">
+                  <i data-lucide="upload-cloud" class="w-5 h-5 text-emerald-600"></i>
+                  <h3 class="text-sm font-bold text-slate-900">Upload CSV Dataset</h3>
+                </div>
+                <p class="text-xs text-slate-500 mb-3">Upload any CSV file with customer feedback (supports Review, Summary, or text columns).</p>
+              </div>
+              <div>
+                <input type="file" id="csv-file-input" accept=".csv" class="hidden">
+                <button
+                  type="button"
+                  id="btn-trigger-upload"
+                  class="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition"
+                >
+                  <i data-lucide="file-up" class="w-3.5 h-3.5"></i>
+                  <span id="upload-btn-label">Choose CSV File</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Status Banner -->
+        <div id="pipeline-status-banner" class="mt-6 p-3.5 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-between text-xs text-sky-800">
+          <div class="flex items-center space-x-2">
+            <i data-lucide="info" class="w-4 h-4 text-sky-600"></i>
+            <span id="pipeline-status-text">Click "Process Root Dataset" to run the batch analysis pipeline.</span>
+          </div>
+          <span id="pipeline-spinner" class="hidden animate-spin">
+            <i data-lucide="loader-2" class="w-4 h-4 text-sky-600"></i>
+          </span>
+        </div>
+      </section>
+    </div>
+
+    <!-- Charts Section -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Chart 1: Sentiment Distribution (5 cols) -->
+      <div class="lg:col-span-5 glass-card rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-2">
+            <div class="p-2 rounded-lg bg-violet-50 text-violet-600">
+              <i data-lucide="pie-chart" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Sentiment Distribution</h3>
+          </div>
+          <span class="text-xs text-slate-400">Class Proportions</span>
+        </div>
+        <div class="relative h-64 flex items-center justify-center">
+          <canvas id="sentimentChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Top Feedback Topics (7 cols) -->
+      <div class="lg:col-span-7 glass-card rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-2">
+            <div class="p-2 rounded-lg bg-amber-50 text-amber-600">
+              <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Top Feedback Topics</h3>
+          </div>
+          <span class="text-xs text-slate-400">Issue Categorization</span>
+        </div>
+        <div class="relative h-64">
+          <canvas id="topicsChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analyzed Reviews Table Section -->
+    <section class="glass-card rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-3">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Batch Processing Results</h3>
+          <p class="text-xs text-slate-500">Inspecting classified reviews with ground truth and Hugging Face predictions</p>
+        </div>
+        <!-- Table Filter Chips -->
+        <div class="flex items-center space-x-2">
+          <button class="filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition" data-filter="all">All</button>
+          <button class="filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="POSITIVE">Positive</button>
+          <button class="filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="NEGATIVE">Negative</button>
+          <button class="filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="HIGH">High Urgency</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar mt-4">
+        <table class="w-full text-left text-xs text-slate-600">
+          <thead class="bg-slate-50 text-slate-700 uppercase font-semibold border-b border-slate-200">
+            <tr>
+              <th class="py-3 px-3">#</th>
+              <th class="py-3 px-3">Product / Headline</th>
+              <th class="py-3 px-3">Customer Feedback</th>
+              <th class="py-3 px-3">Topic</th>
+              <th class="py-3 px-3">Urgency</th>
+              <th class="py-3 px-3">HF Sentiment</th>
+              <th class="py-3 px-3">Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-table-body" class="divide-y divide-slate-100">
+            <tr>
+              <td colspan="7" class="py-8 text-center text-slate-400">
+                No dataset loaded yet. Click <strong>"Process Root Dataset"</strong> above to load the live data!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white py-6 mt-12 text-center text-xs text-slate-400">
+    <p>Sentiment & Topic Analysis powered by Hugging Face <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-600">distilbert-base-uncased-finetuned-sst-2-english</code> & Express.js</p>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Chart.js Instances
+    let sentimentChartInstance = null;
+    let topicsChartInstance = null;
+    let currentReviewsData = [];
+
+    // Initialize Empty Charts
+    function initCharts() {
+      // 1. Sentiment Donut
+      const ctxSentiment = document.getElementById('sentimentChart').getContext('2d');
+      sentimentChartInstance = new Chart(ctxSentiment, {
+        type: 'doughnut',
+        data: {
+          labels: ['Positive', 'Negative', 'Neutral'],
+          datasets: [{
+            data: [0, 0, 0],
+            backgroundColor: ['#10b981', '#f43f5e', '#94a3b8'],
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 12, font: { size: 11 } }
+            }
+          },
+          cutout: '70%'
+        }
+      });
+
+      // 2. Topics Bar Chart
+      const ctxTopics = document.getElementById('topicsChart').getContext('2d');
+      topicsChartInstance = new Chart(ctxTopics, {
+        type: 'bar',
+        data: {
+          labels: ['Quality', 'Performance', 'Pricing', 'Design', 'Delivery', 'Support'],
+          datasets: [{
+            label: 'Review Mentions',
+            data: [0, 0, 0, 0, 0, 0],
+            backgroundColor: '#0284c7',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1, font: { size: 10 } },
+              grid: { color: '#f1f5f9' }
+            },
+            x: {
+              ticks: { font: { size: 10 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // Update KPI Display
+    function updateKPIs(kpis) {
+      if (!kpis) return;
+      document.getElementById('kpi-total').textContent = kpis.total;
+      document.getElementById('kpi-positive').textContent = kpis.positivePct + '%';
+      document.getElementById('kpi-positive-count').textContent = `(${kpis.breakdown.positive} reviews)`;
+      document.getElementById('kpi-positive-bar').style.width = kpis.positivePct + '%';
+
+      document.getElementById('kpi-negative').textContent = kpis.negativePct + '%';
+      document.getElementById('kpi-negative-count').textContent = `(${kpis.breakdown.negative} reviews)`;
+      document.getElementById('kpi-negative-bar').style.width = kpis.negativePct + '%';
+
+      document.getElementById('kpi-urgency').textContent = kpis.highUrgencyCount;
+      document.getElementById('kpi-updated-time').textContent = 'Last synced: ' + new Date().toLocaleTimeString();
+
+      // Update Sentiment Chart
+      if (sentimentChartInstance) {
+        sentimentChartInstance.data.datasets[0].data = [
+          kpis.breakdown.positive,
+          kpis.breakdown.negative,
+          kpis.breakdown.neutral
+        ];
+        sentimentChartInstance.update();
+      }
+
+      // Update Topics Chart
+      if (topicsChartInstance && kpis.topicCounts) {
+        const topics = Object.keys(kpis.topicCounts);
+        const counts = Object.values(kpis.topicCounts);
+        topicsChartInstance.data.labels = topics;
+        topicsChartInstance.data.datasets[0].data = counts;
+        topicsChartInstance.update();
+      }
+    }
+
+    // Render Reviews Table
+    function renderReviewsTable(reviews, filter = 'all') {
+      const tbody = document.getElementById('reviews-table-body');
+      tbody.innerHTML = '';
+
+      let filtered = reviews;
+      if (filter === 'POSITIVE') filtered = reviews.filter(r => r.sentiment === 'POSITIVE');
+      else if (filter === 'NEGATIVE') filtered = reviews.filter(r => r.sentiment === 'NEGATIVE');
+      else if (filter === 'HIGH') filtered = reviews.filter(r => r.urgency === 'High');
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">No reviews found matching the selected filter.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50/80 transition';
+
+        const sentimentClass = r.sentiment === 'POSITIVE'
+          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+          : r.sentiment === 'NEGATIVE'
+          ? 'bg-rose-50 text-rose-700 border border-rose-200'
+          : 'bg-slate-100 text-slate-700 border border-slate-200';
+
+        const urgencyClass = r.urgency === 'High'
+          ? 'bg-red-100 text-red-800 font-bold border border-red-300 animate-pulse'
+          : r.urgency === 'Medium'
+          ? 'bg-amber-50 text-amber-700 border border-amber-200'
+          : 'bg-slate-50 text-slate-600 border border-slate-200';
+
+        const scorePct = Math.round(r.score * 100);
+
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-mono text-slate-400">${idx + 1}</td>
+          <td class="py-3 px-3 max-w-[180px]">
+            <div class="font-semibold text-slate-800 truncate" title="${r.headline || r.product}">${r.headline || 'Review'}</div>
+            <div class="text-[10px] text-slate-400 truncate" title="${r.product}">${r.product}</div>
+          </td>
+          <td class="py-3 px-3 max-w-[280px]">
+            <p class="line-clamp-2 text-slate-700" title="${r.text}">"${r.text}"</p>
+          </td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-100 whitespace-nowrap">${r.topic}</span>
+          </td>
+          <td class="py-3 px-3 whitespace-nowrap">
+            <span class="px-2 py-0.5 rounded text-[11px] font-medium ${urgencyClass}">${r.urgency}</span>
+          </td>
+          <td class="py-3 px-3 whitespace-nowrap">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${sentimentClass}">${r.sentiment}</span>
+          </td>
+          <td class="py-3 px-3">
+            <div class="flex items-center space-x-2">
+              <span class="font-mono text-xs font-semibold text-slate-700">${scorePct}%</span>
+              <div class="w-12 bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div class="h-1.5 rounded-full ${r.sentiment === 'POSITIVE' ? 'bg-emerald-500' : 'bg-rose-500'}" style="width: ${scorePct}%"></div>
+              </div>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Set Status Message
+    function setPipelineStatus(message, isLoading = false) {
+      document.getElementById('pipeline-status-text').textContent = message;
+      const spinner = document.getElementById('pipeline-spinner');
+      if (isLoading) spinner.classList.remove('hidden');
+      else spinner.classList.add('hidden');
+    }
+
+    // 1. Live Single Review Testing Handler
+    const singleForm = document.getElementById('single-analysis-form');
+    singleForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = document.getElementById('review-input').value.trim();
+      if (!text) return;
+
+      const analyzeBtn = document.getElementById('analyze-btn');
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Analyzing with HF...</span>`;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        // Display results
+        const resCard = document.getElementById('single-result-card');
+        resCard.classList.remove('hidden');
+
+        const badge = document.getElementById('res-sentiment-badge');
+        badge.textContent = data.sentiment;
+        badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold ' + (
+          data.sentiment === 'POSITIVE'
+            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+            : data.sentiment === 'NEGATIVE'
+            ? 'bg-rose-100 text-rose-800 border border-rose-300'
+            : 'bg-slate-100 text-slate-800 border border-slate-300'
+        );
+
+        document.getElementById('res-confidence').textContent = `${(data.score * 100).toFixed(2)}%`;
+        document.getElementById('res-topic').textContent = data.topic;
+
+        const urgencySpan = document.getElementById('res-urgency');
+        urgencySpan.textContent = data.urgency;
+        urgencySpan.className = 'text-xs font-semibold px-2 py-0.5 rounded ' + (
+          data.urgency === 'High' ? 'bg-red-100 text-red-800 animate-pulse' :
+          data.urgency === 'Medium' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
+        );
+
+        document.getElementById('result-timestamp').textContent = new Date().toLocaleTimeString();
+      } catch (err) {
+        alert('Analysis error: ' + err.message);
+      } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i><span>Analyze Sentiment & Topic</span>`;
+        lucide.createIcons();
+      }
+    });
+
+    // Preset Buttons
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('review-input').value = btn.getAttribute('data-text');
+      });
+    });
+
+    // 2. Process Root Dataset
+    document.getElementById('btn-run-root-dataset').addEventListener('click', async () => {
+      const limit = document.getElementById('batch-limit-select').value;
+      setPipelineStatus(`Processing ${limit} reviews from root dataset.csv via Hugging Face...`, true);
+
+      try {
+        const res = await fetch(`/api/dataset/batch?limit=${limit}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        currentReviewsData = data.reviews;
+        updateKPIs(data.kpis);
+        renderReviewsTable(currentReviewsData);
+        setPipelineStatus(`Successfully processed ${data.totalProcessed} reviews from ${data.source}!`);
+      } catch (err) {
+        setPipelineStatus(`Error processing dataset: ${err.message}`);
+      }
+    });
+
+    // 3. Upload CSV Dataset Handler
+    const fileInput = document.getElementById('csv-file-input');
+    const uploadBtn = document.getElementById('btn-trigger-upload');
+
+    uploadBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('upload-btn-label').textContent = file.name;
+      setPipelineStatus(`Uploading & analyzing ${file.name}...`, true);
+
+      const formData = new FormData();
+      formData.append('dataset', file);
+      formData.append('limit', '15');
+
+      try {
+        const res = await fetch('/api/upload-dataset', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        currentReviewsData = data.reviews;
+        updateKPIs(data.kpis);
+        renderReviewsTable(currentReviewsData);
+        setPipelineStatus(`Successfully uploaded & analyzed ${data.totalProcessed} reviews from ${data.filename}!`);
+      } catch (err) {
+        setPipelineStatus(`Upload failed: ${err.message}`);
+      }
+    });
+
+    // Table Filter Chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(c => {
+          c.className = 'filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+        });
+        chip.className = 'filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition';
+
+        const filter = chip.getAttribute('data-filter');
+        renderReviewsTable(currentReviewsData, filter);
+      });
+    });
+
+    // Initial load: initialize charts & trigger batch analysis of first 5 reviews on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      initCharts();
+      // Auto load first 10 reviews
+      document.getElementById('btn-run-root-dataset').click();
+    });
+  </script>
+</body>
+</html>

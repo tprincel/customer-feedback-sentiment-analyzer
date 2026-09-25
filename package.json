@@ -19,6 +19,10 @@
   },
   "homepage": "https://github.com/tprincel/customer-feedback-sentiment-analyzer#readme",
   "dependencies": {
+    "@huggingface/inference": "^4.13.30",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "multer": "^2.4.0",
     "sentiment": "^5.0.2"
   }
 }
