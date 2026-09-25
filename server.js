@@ -213,19 +213,39 @@ app.get('/api/health', (req, res) => {
 // Authentication: Login Endpoint
 app.post('/api/auth/login', (req, res) => {
   const { identifier, password } = req.body;
-  if (!identifier || !password) {
-    return res.status(400).json({ error: 'Please enter your email or phone number and password.' });
+  const cleanId = (identifier || '').trim();
+
+  if (!cleanId || !password) {
+    return res.status(400).json({ error: 'Please enter your email or 10-digit phone number and password.' });
+  }
+
+  // Validate Phone (10 digits) or Email
+  const isPhone = /^\d+$/.test(cleanId);
+  if (isPhone) {
+    if (!/^[0-9]{10}$/.test(cleanId)) {
+      return res.status(400).json({ error: 'Phone number must be exactly 10 digits.' });
+    }
+  } else {
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanId);
+    if (!isEmail) {
+      return res.status(400).json({ error: 'Please enter a valid email address or 10-digit phone number.' });
+    }
+  }
+
+  // Password validation: minimum 6 characters
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
   }
 
   // Derive display name from email or phone
-  let displayName = identifier.includes('@') ? identifier.split('@')[0] : 'User ' + identifier.slice(-4);
+  let displayName = cleanId.includes('@') ? cleanId.split('@')[0] : 'User ' + cleanId.slice(-4);
   displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
   res.json({
     success: true,
     user: {
       name: displayName,
-      identifier: identifier.trim(),
+      identifier: cleanId,
       role: 'Product Specialist',
       token: 'jwt_session_' + Date.now()
     }
@@ -235,28 +255,45 @@ app.post('/api/auth/login', (req, res) => {
 // Authentication: Sign Up Endpoint
 app.post('/api/auth/signup', (req, res) => {
   const { name, identifier, password } = req.body;
-  if (!identifier || !password) {
-    return res.status(400).json({ error: 'Please enter your email or phone number and a password.' });
+  const cleanId = (identifier || '').trim();
+
+  if (!cleanId || !password) {
+    return res.status(400).json({ error: 'Please enter your email or 10-digit phone number and a password.' });
   }
 
+  // Validate Phone (10 digits) or Email
+  const isPhone = /^\d+$/.test(cleanId);
+  if (isPhone) {
+    if (!/^[0-9]{10}$/.test(cleanId)) {
+      return res.status(400).json({ error: 'Phone number must be exactly 10 digits.' });
+    }
+  } else {
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanId);
+    if (!isEmail) {
+      return res.status(400).json({ error: 'Please enter a valid email address or 10-digit phone number.' });
+    }
+  }
+
+  // Password validation: minimum 6 characters
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
   }
 
   const displayName = name && name.trim() ? name.trim() : (
-    identifier.includes('@') ? identifier.split('@')[0] : 'User ' + identifier.slice(-4)
+    cleanId.includes('@') ? cleanId.split('@')[0] : 'User ' + cleanId.slice(-4)
   );
 
   res.json({
     success: true,
     user: {
       name: displayName,
-      identifier: identifier.trim(),
+      identifier: cleanId,
       role: 'Product Specialist',
       token: 'jwt_session_' + Date.now()
     }
   });
 });
+
 
 
 // Live Single Review Analysis
