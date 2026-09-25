@@ -1,0 +1,24 @@
+{
+  "name": "sentiment-analyzer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tprincel/customer-feedback-sentiment-analyzer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tprincel/customer-feedback-sentiment-analyzer/issues"
+  },
+  "homepage": "https://github.com/tprincel/customer-feedback-sentiment-analyzer#readme",
+  "dependencies": {
+    "sentiment": "^5.0.2"
+  }
+}
