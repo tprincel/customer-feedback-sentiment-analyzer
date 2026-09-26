@@ -23,6 +23,7 @@
     "dotenv": "^18.0.4",
     "express": "^5.2.1",
     "multer": "^2.4.0",
-    "sentiment": "^5.0.2"
+    "sentiment": "^5.0.2",
+    "sqlite3": "^6.0.1"
   }
 }

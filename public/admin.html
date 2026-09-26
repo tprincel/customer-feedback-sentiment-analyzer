@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#133f3b">
+  <title>Database Admin | SentimentPulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #183331;
+      --muted: #70817d;
+      --line: #e0e8e4;
+      --paper: #f6f8f5;
+      --surface: #fff;
+      --forest: #133f3b;
+      --mint: #c8eee2;
+      --coral: #d86c50;
+      --mono: 'DM Mono', Consolas, monospace;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; }
+    button, input { font: inherit; }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 252px minmax(0, 1fr); }
+    aside { display: flex; flex-direction: column; padding: 28px 18px; background: var(--forest); color: #f4fbf7; }
+    .brand { display: flex; gap: 12px; align-items: center; padding: 0 10px 34px; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; background: var(--mint); color: var(--forest); font-size: 18px; font-weight: 800; }
+    .brand-name { font-size: 14px; font-weight: 800; letter-spacing: 0; }
+    .brand-subtitle { margin-top: 3px; color: #a9c4bb; font-size: 11px; }
+    .nav-label { padding: 0 12px 10px; color: #9bb8ae; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .table-nav { display: grid; gap: 5px; }
+    .table-tab { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px; border: 0; border-radius: 6px; background: transparent; color: #d3e2dc; text-align: left; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .table-tab:hover { background: #24534d; }
+    .table-tab[aria-selected="true"] { background: #d8f2e8; color: var(--forest); }
+    .tab-count { font: 11px var(--mono); opacity: .75; }
+    .aside-foot { margin-top: auto; padding: 18px 10px 0; color: #a9c4bb; font-size: 11px; line-height: 1.6; }
+    main { min-width: 0; padding: 34px clamp(18px, 4vw, 58px) 48px; }
+    .topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 32px; }
+    .eyebrow { color: var(--coral); font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    h1 { margin: 7px 0 0; font-size: clamp(23px, 3vw, 32px); line-height: 1.2; letter-spacing: 0; }
+    .top-actions { display: flex; align-items: center; gap: 12px; }
+    .live { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #4e9b72; box-shadow: 0 0 0 3px #dcefe4; }
+    .refresh { padding: 10px 14px; border: 1px solid var(--forest); border-radius: 5px; background: var(--forest); color: white; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .refresh:hover { background: #20534c; }
+    .table-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-bottom: 18px; }
+    .table-heading h2 { margin: 0; font-size: 17px; }
+    .table-meta { margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .search { width: min(260px, 42vw); padding: 10px 12px; border: 1px solid var(--line); border-radius: 5px; outline: none; background: var(--surface); color: var(--ink); font-size: 11px; }
+    .search:focus { border-color: #619789; box-shadow: 0 0 0 3px #dcefe7; }
+    .grid-frame { overflow: auto; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { position: sticky; top: 0; padding: 12px 15px; border-bottom: 1px solid var(--line); background: #f0f5f1; color: #5b706a; font-size: 10px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; white-space: nowrap; }
+    td { max-width: 460px; padding: 13px 15px; border-bottom: 1px solid #edf1ee; color: #334744; font-size: 11px; line-height: 1.55; vertical-align: top; overflow-wrap: anywhere; }
+    tr:last-child td { border-bottom: 0; }
+    td[data-mono="true"] { font-family: var(--mono); font-size: 10px; }
+    .empty { padding: 50px 20px; color: var(--muted); text-align: center; font-size: 12px; }
+    .error { color: #a74632; }
+    .statusline { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; color: var(--muted); font-size: 10px; }
+    .summary { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .summary-item { padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; background: white; color: #526660; font-size: 10px; }
+    .summary-item strong { margin-left: 5px; color: var(--forest); font-family: var(--mono); }
+    @media (max-width: 760px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { padding: 16px; }
+      .brand { padding: 0 4px 16px; }
+      .nav-label, .aside-foot { display: none; }
+      .table-nav { display: flex; overflow-x: auto; padding-bottom: 2px; }
+      .table-tab { width: auto; flex: 0 0 auto; padding: 10px 12px; }
+      main { padding-top: 24px; }
+      .topline { align-items: flex-start; margin-bottom: 26px; }
+    }
+    @media (max-width: 480px) {
+      .topline { display: block; }
+      .top-actions { justify-content: space-between; margin-top: 18px; }
+      .table-heading { align-items: flex-start; flex-direction: column; }
+      .search { width: 100%; }
+      .statusline { flex-direction: column; }
+      td { min-width: 125px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">S</div>
+        <div><div class="brand-name">SentimentPulse</div><div class="brand-subtitle">Database console</div></div>
+      </div>
+      <div class="nav-label">SQLite tables</div>
+      <nav class="table-nav" id="table-nav" aria-label="Database tables"></nav>
+      <div class="aside-foot">Read-only table viewer<br>Refreshes automatically every 10 seconds</div>
+    </aside>
+
+    <main>
+      <header class="topline">
+        <div><div class="eyebrow">Administration / Data</div><h1>Database tables</h1></div>
+        <div class="top-actions">
+          <span class="live"><span class="live-dot" aria-hidden="true"></span>Live updates</span>
+          <button class="refresh" id="refresh" type="button">Refresh now</button>
+        </div>
+      </header>
+
+      <section aria-labelledby="table-title">
+        <div class="table-heading">
+          <div><h2 id="table-title">Users</h2><div class="table-meta" id="table-meta">Loading records...</div></div>
+          <input class="search" id="search" type="search" placeholder="Filter visible records" aria-label="Filter visible records">
+        </div>
+        <div class="grid-frame" id="grid-frame" aria-live="polite">
+          <div class="empty">Loading database records...</div>
+        </div>
+        <div class="summary" id="summary" aria-label="Analytics endpoint totals" hidden></div>
+        <div class="statusline"><span id="status">Connecting to database...</span><span id="updated-at"></span></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tables = [
+      { key: 'users', label: 'Users', endpoint: '/api/admin/users' },
+      { key: 'sentiment-history', label: 'Sentiment History', endpoint: '/api/admin/sentiment-history' },
+      { key: 'chat-logs', label: 'Chatbot Logs', endpoint: '/api/admin/chat-logs' },
+      { key: 'analytics', label: 'API Usage & Analytics', endpoint: '/api/admin/analytics' }
+    ];
+    const nav = document.getElementById('table-nav');
+    const frame = document.getElementById('grid-frame');
+    const search = document.getElementById('search');
+    let activeTable = tables[0];
+    let currentRows = [];
+    let requestNumber = 0;
+
+    function makeElement(tag, text, className) {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    }
+
+    function renderTabs(counts = {}) {
+      nav.replaceChildren();
+      for (const table of tables) {
+        const button = makeElement('button', undefined, 'table-tab');
+        button.type = 'button';
+        button.setAttribute('aria-selected', String(table.key === activeTable.key));
+        button.append(makeElement('span', table.label));
+        const count = counts[table.key];
+        if (count !== undefined) button.append(makeElement('span', String(count), 'tab-count'));
+        button.addEventListener('click', () => {
+          activeTable = table;
+          renderTabs(counts);
+          search.value = '';
+          loadTable();
+        });
+        nav.append(button);
+      }
+    }
+
+    function renderRows() {
+      const needle = search.value.trim().toLowerCase();
+      const rows = currentRows.filter(row => !needle || Object.values(row).some(value => String(value ?? '').toLowerCase().includes(needle)));
+      if (rows.length === 0) {
+        frame.replaceChildren(makeElement('div', currentRows.length ? 'No records match this filter.' : 'This table has no records yet.', 'empty'));
+        return;
+      }
+      const columns = Object.keys(rows[0]);
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const headingRow = document.createElement('tr');
+      for (const column of columns) headingRow.append(makeElement('th', column));
+      thead.append(headingRow);
+      const tbody = document.createElement('tbody');
+      for (const row of rows) {
+        const tr = document.createElement('tr');
+        for (const column of columns) {
+          const td = makeElement('td', row[column] == null ? '' : String(row[column]));
+          if (column === 'id' || column === 'user_id' || column === 'score' || column === 'timestamp') td.dataset.mono = 'true';
+          tr.append(td);
+        }
+        tbody.append(tr);
+      }
+      table.append(thead, tbody);
+      frame.replaceChildren(table);
+    }
+
+    async function loadTable() {
+      const request = ++requestNumber;
+      const tableAtRequest = activeTable;
+      document.getElementById('table-title').textContent = tableAtRequest.label;
+      document.getElementById('table-meta').textContent = 'Loading records...';
+      document.getElementById('status').textContent = 'Refreshing table data...';
+      document.getElementById('summary').hidden = true;
+      try {
+        const response = await fetch(tableAtRequest.endpoint, { cache: 'no-store' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `Request failed (${response.status})`);
+        if (request !== requestNumber) return;
+        currentRows = Array.isArray(result.data) ? result.data : [];
+        document.getElementById('table-meta').textContent = `${result.count ?? currentRows.length} records · ${Object.keys(currentRows[0] || {}).length} columns`;
+        document.getElementById('status').textContent = 'Connected · updates every 10 seconds';
+        document.getElementById('updated-at').textContent = `Updated ${new Date().toLocaleTimeString()}`;
+        renderRows();
+        if (tableAtRequest.key === 'analytics' && Array.isArray(result.summary)) {
+          const summary = document.getElementById('summary');
+          summary.replaceChildren();
+          for (const item of result.summary) {
+            const pill = makeElement('span', undefined, 'summary-item');
+            pill.append(document.createTextNode(item.endpoint));
+            pill.append(makeElement('strong', String(item.count)));
+            summary.append(pill);
+          }
+          summary.hidden = result.summary.length === 0;
+        }
+      } catch (error) {
+        if (request !== requestNumber) return;
+        frame.replaceChildren(makeElement('div', `Could not load ${tableAtRequest.label}: ${error.message}`, 'empty error'));
+        document.getElementById('table-meta').textContent = 'Unable to load records';
+        document.getElementById('status').textContent = 'Connection error';
+      }
+    }
+
+    search.addEventListener('input', renderRows);
+    document.getElementById('refresh').addEventListener('click', loadTable);
+    renderTabs();
+    loadTable();
+    window.setInterval(loadTable, 10000);
+  </script>
+</body>
+</html>

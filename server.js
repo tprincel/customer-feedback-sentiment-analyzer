@@ -20,6 +20,18 @@ const upload = multer({
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Initialize SQLite Database
+const db = require('./db');
+const databaseReady = db.initDB();
+
+// Middleware: Log API Usage to SQLite
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') && !req.path.startsWith('/api/admin') && req.path !== '/api/health') {
+    db.logApiUsage(req.body?.user_id || null, req.path);
+  }
+  next();
+});
+
 // Initialize Hugging Face Inference
 const hfApiKey = process.env.HUGGINGFACE_API_KEY;
 const hf = hfApiKey ? new HfInference(hfApiKey) : null;
@@ -292,6 +304,9 @@ app.post('/api/auth/login', (req, res) => {
   let displayName = cleanId.includes('@') ? cleanId.split('@')[0] : 'User ' + cleanId.slice(-4);
   displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
+  // Record user in SQLite
+  db.recordUser(displayName, cleanId).catch(() => {});
+
   res.json({
     success: true,
     user: {
@@ -335,6 +350,9 @@ app.post('/api/auth/signup', (req, res) => {
     return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
   }
 
+  // Record user in SQLite
+  db.recordUser(displayName, cleanId).catch(() => {});
+
   res.json({
     success: true,
     user: {
@@ -351,7 +369,7 @@ app.post('/api/auth/signup', (req, res) => {
 // Live Single Review Analysis
 app.post('/api/analyze', async (req, res) => {
   try {
-    const { text, rating, headline } = req.body;
+    const { text, rating, headline, user_id } = req.body;
     if (!text || typeof text !== 'string') {
       return res.status(400).json({ error: 'Please provide valid review text to analyze.' });
     }
@@ -360,6 +378,9 @@ app.post('/api/analyze', async (req, res) => {
     const topic = detectTopic(`${headline || ''} ${text}`);
     const urgency = detectUrgency(sentimentResult.label, sentimentResult.score, `${headline || ''} ${text}`, rating);
     const tips = generateImprovementTips(topic, sentimentResult.label, `${headline || ''} ${text}`, urgency);
+
+    // Log to SQLite database
+    db.logSentiment(user_id || null, text, sentimentResult.label, sentimentResult.score);
 
     res.json({
       success: true,
@@ -537,6 +558,9 @@ app.post('/api/chat', async (req, res) => {
       reply = `Classified as **NEUTRAL / MODERATE** (${scorePct}% confidence). Urgency is **${urgency}** under category **"${topic}"**.\n\nSuggested enhancements:\n• ${tips.join('\n• ')}`;
     }
 
+    // Log to SQLite database
+    db.logChat(req.body?.user_id || null, cleanText, reply);
+
     res.json({
       success: true,
       reply,
@@ -555,11 +579,86 @@ app.post('/api/chat', async (req, res) => {
 });
 
 
-// Start listening
-app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(` Sentiment Analytics Dashboard Server Started!`);
-  console.log(` Local URL: http://localhost:${PORT}`);
-  console.log(` Hugging Face Inference: ${hf ? 'Configured (Active)' : 'Local Engine'}`);
-  console.log(`====================================================`);
+// ================= ADMIN DATABASE API ROUTES =================
+
+// 1. Fetch Users Table
+app.get('/api/admin/users', async (req, res) => {
+  try {
+    const users = await db.all('SELECT id, username, email, created_at FROM users ORDER BY id DESC');
+    res.json({ success: true, count: users.length, data: users });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users: ' + err.message });
+  }
+});
+
+// 2. Fetch Sentiment History Table
+app.get('/api/admin/sentiment-history', async (req, res) => {
+  try {
+    const history = await db.all(`
+      SELECT s.id, s.user_id, COALESCE(u.username, 'Anonymous') AS username, COALESCE(u.email, 'N/A') AS email, s.text, s.label, s.score, s.timestamp
+      FROM sentiment_history s
+      LEFT JOIN users u ON s.user_id = u.id
+      ORDER BY s.id DESC
+    `);
+    res.json({ success: true, count: history.length, data: history });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch sentiment history: ' + err.message });
+  }
+});
+
+// 3. Fetch Chatbot Logs Table
+app.get('/api/admin/chat-logs', async (req, res) => {
+  try {
+    const logs = await db.all(`
+      SELECT c.id, c.user_id, COALESCE(u.username, 'Anonymous') AS username, COALESCE(u.email, 'N/A') AS email, c.prompt, c.response, c.timestamp
+      FROM chatbot_logs c
+      LEFT JOIN users u ON c.user_id = u.id
+      ORDER BY c.id DESC
+    `);
+    res.json({ success: true, count: logs.length, data: logs });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch chat logs: ' + err.message });
+  }
+});
+
+// 4. Fetch API Usage & Analytics Table
+app.get('/api/admin/analytics', async (req, res) => {
+  try {
+    const logs = await db.all(`
+      SELECT a.id, a.user_id, COALESCE(u.username, 'Anonymous') AS username, COALESCE(u.email, 'N/A') AS email, a.endpoint, a.timestamp
+      FROM api_usage a
+      LEFT JOIN users u ON a.user_id = u.id
+      ORDER BY a.id DESC
+    `);
+    const summary = await db.all(`
+      SELECT endpoint, COUNT(*) AS count
+      FROM api_usage
+      GROUP BY endpoint
+      ORDER BY count DESC
+    `);
+    res.json({ success: true, count: logs.length, summary, data: logs });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch analytics: ' + err.message });
+  }
+});
+
+// Serve Dedicated Admin Webpage Route
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+
+
+// Start listening only after the database schema and seed data are ready.
+databaseReady.then(() => {
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(` Sentiment Analytics Dashboard Server Started!`);
+    console.log(` Local URL: http://localhost:${PORT}`);
+    console.log(` Hugging Face Inference: ${hf ? 'Configured (Active)' : 'Local Engine'}`);
+    console.log(`====================================================`);
+  });
+}).catch(err => {
+  console.error('Failed to initialize SQLite database:', err);
+  process.exitCode = 1;
 });
