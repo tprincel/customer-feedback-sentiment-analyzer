@@ -217,16 +217,31 @@
           <div>
             <div class="flex items-center space-x-2">
               <h1 class="text-base font-bold text-primary-dark leading-tight">SentimentPulse</h1>
-              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-mint-light text-primary-dark border border-mint-accent">
+              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-mint-light text-primary-dark border border-mint-accent" data-i18n="badge_dashboard">
                 Dashboard
               </span>
             </div>
-            <p class="text-[11px] text-slate-400">Customer Feedback & Topic Intelligence</p>
+            <p class="text-[11px] text-slate-400" data-i18n="tagline">Customer Feedback & Topic Intelligence</p>
           </div>
         </div>
 
         <!-- Right: Status & User Profile -->
         <div class="flex items-center space-x-4">
+          <!-- Language Selector -->
+          <div class="flex items-center space-x-1.5">
+            <i data-lucide="languages" class="w-4 h-4 text-primary-dark"></i>
+            <select
+              id="lang-select"
+              class="text-xs rounded-lg border border-slate-200 py-1.5 px-2 bg-white text-slate-700 focus:outline-none focus:border-primary-dark font-semibold cursor-pointer"
+            >
+              <option value="en">English</option>
+              <option value="hi">Hindi</option>
+              <option value="mr">Marathi</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+            </select>
+          </div>
+
           <!-- Engine Status Badge -->
           <div id="engine-status-badge" class="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-mint-light/60 text-primary-dark border border-mint-accent/80">
             <span class="w-2 h-2 rounded-full bg-primary-dark"></span>
@@ -262,8 +277,8 @@
       <section>
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h2 class="text-xs font-bold uppercase tracking-wider text-primary-dark/70">Executive Metrics Overview</h2>
-            <p class="text-xs text-slate-400 mt-0.5">Aggregated metrics computed from current customer feedback sample</p>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-primary-dark/70" data-i18n="kpi_title">Executive Metrics Overview</h2>
+            <p class="text-xs text-slate-400 mt-0.5" data-i18n="kpi_sub">Aggregated metrics computed from current customer feedback sample</p>
           </div>
           <span id="kpi-updated-time" class="text-xs font-medium text-slate-400">Ready</span>
         </div>
@@ -272,25 +287,25 @@
           <!-- Card 1: Total Processed -->
           <div class="bg-white rounded-2xl p-5 card-elevated border border-mint-light/70 hover:shadow-lg transition">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-primary-dark uppercase tracking-wider">Total Reviews</span>
+              <span class="text-xs font-bold text-primary-dark uppercase tracking-wider" data-i18n="card_total">Total Reviews</span>
               <div class="w-9 h-9 rounded-xl bg-primary-dark/10 text-primary-dark flex items-center justify-center">
                 <i data-lucide="layers" class="w-4 h-4"></i>
               </div>
             </div>
             <div class="mt-3 flex items-baseline space-x-2">
               <span id="kpi-total" class="text-3xl font-extrabold text-primary-dark">0</span>
-              <span class="text-xs text-slate-400 font-medium">analyzed</span>
+              <span class="text-xs text-slate-400 font-medium" data-i18n="card_analyzed">analyzed</span>
             </div>
             <p class="text-xs text-slate-500 mt-2 flex items-center">
               <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1 text-primary-dark"></i>
-              <span>Active batch sample</span>
+              <span data-i18n="card_active">Active batch sample</span>
             </p>
           </div>
 
           <!-- Card 2: Positive Share -->
           <div class="bg-white rounded-2xl p-5 card-elevated border border-mint-light/70 hover:shadow-lg transition">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-primary-dark uppercase tracking-wider">Positive Share</span>
+              <span class="text-xs font-bold text-primary-dark uppercase tracking-wider" data-i18n="card_pos">Positive Share</span>
               <div class="w-9 h-9 rounded-xl bg-mint-light text-primary-dark flex items-center justify-center">
                 <i data-lucide="thumbs-up" class="w-4 h-4"></i>
               </div>
@@ -307,7 +322,7 @@
           <!-- Card 3: Negative Share -->
           <div class="bg-white rounded-2xl p-5 card-elevated border border-soft-pink/80 hover:shadow-lg transition">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-accent-coral uppercase tracking-wider">Negative Share</span>
+              <span class="text-xs font-bold text-accent-coral uppercase tracking-wider" data-i18n="card_neg">Negative Share</span>
               <div class="w-9 h-9 rounded-xl bg-soft-pink text-accent-coral flex items-center justify-center">
                 <i data-lucide="thumbs-down" class="w-4 h-4"></i>
               </div>
@@ -324,18 +339,18 @@
           <!-- Card 4: Urgent Alerts -->
           <div class="bg-white rounded-2xl p-5 card-elevated border-l-4 border-l-accent-coral border-t border-r border-b border-slate-200 hover:shadow-lg transition">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-accent-coral uppercase tracking-wider">High-Urgency Alerts</span>
+              <span class="text-xs font-bold text-accent-coral uppercase tracking-wider" data-i18n="card_urg">High-Urgency Alerts</span>
               <div class="w-9 h-9 rounded-xl bg-soft-pink text-accent-coral flex items-center justify-center">
                 <i data-lucide="alert-triangle" class="w-4 h-4"></i>
               </div>
             </div>
             <div class="mt-3 flex items-baseline space-x-2">
               <span id="kpi-urgency" class="text-3xl font-extrabold text-accent-coral">0</span>
-              <span class="text-xs text-slate-400 font-medium">action required</span>
+              <span class="text-xs text-slate-400 font-medium" data-i18n="card_action">action required</span>
             </div>
             <p class="text-xs text-slate-500 mt-2 flex items-center">
               <i data-lucide="shield-alert" class="w-3.5 h-3.5 mr-1 text-accent-coral"></i>
-              <span>Defects, safety & returns</span>
+              <span data-i18n="card_urg_sub">Defects, safety & returns</span>
             </p>
           </div>
         </div>
@@ -344,8 +359,8 @@
       <!-- Section: Live Testing & Batch Pipeline -->
       <div class="space-y-4">
       <div>
-        <h2 class="text-xs font-bold uppercase tracking-wider text-primary-dark/70">Analysis Workspace</h2>
-        <p class="text-xs text-slate-400 mt-0.5">Test a single review instantly, or classify a CSV dataset in batch.</p>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-primary-dark/70" data-i18n="ws_title">Analysis Workspace</h2>
+        <p class="text-xs text-slate-400 mt-0.5" data-i18n="ws_sub">Test a single review instantly, or classify a CSV dataset in batch.</p>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
@@ -357,29 +372,30 @@
                 <div class="w-8 h-8 rounded-xl bg-mint-light text-primary-dark flex items-center justify-center">
                   <i data-lucide="message-square" class="w-4 h-4"></i>
                 </div>
-                <h3 class="text-sm font-bold text-primary-dark">Single Review Test</h3>
+                <h3 class="text-sm font-bold text-primary-dark" data-i18n="single_title">Single Review Test</h3>
               </div>
-              <span class="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+              <span class="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-600" data-i18n="single_badge">
                 Instant
               </span>
             </div>
-            <p class="text-xs text-slate-500 mb-4">Input raw customer feedback to perform instant sentiment classification, topic detection, and urgency assessment.</p>
+            <p class="text-xs text-slate-500 mb-4" data-i18n="single_desc">Input raw customer feedback to perform instant sentiment classification, topic detection, and urgency assessment.</p>
 
             <form id="single-analysis-form" class="space-y-4">
               <div>
-                <label for="review-input" class="block text-xs font-semibold text-primary-dark mb-1">Customer Review Content</label>
+                <label for="review-input" class="block text-xs font-semibold text-primary-dark mb-1" data-i18n="single_label">Customer Review Content</label>
                 <textarea
                   id="review-input"
                   rows="4"
                   required
                   placeholder="Paste or write customer feedback here..."
+                  data-i18n-placeholder="single_placeholder"
                   class="w-full text-xs rounded-xl border border-slate-200 p-3 bg-off-white text-slate-800 placeholder-slate-400 focus:outline-none focus:border-primary-dark focus:ring-1 focus:ring-primary-dark transition"
                 ></textarea>
               </div>
 
               <!-- Clean Preset Buttons (No Emojis) -->
               <div>
-                <span class="text-[11px] font-semibold text-slate-500 block mb-1.5 uppercase tracking-wider">Example Presets:</span>
+                <span class="text-[11px] font-semibold text-slate-500 block mb-1.5 uppercase tracking-wider" data-i18n="presets_label">Example Presets:</span>
                 <div class="flex flex-col sm:flex-row gap-1.5">
                   <button
                     type="button"
@@ -387,7 +403,7 @@
                     data-text="Super! great cooler excellent air flow and for this price its so amazing and unbelievable just love it"
                   >
                     <i data-lucide="check" class="w-3 h-3 text-primary-dark"></i>
-                    <span>High Satisfaction</span>
+                    <span data-i18n="preset_pos">High Satisfaction</span>
                   </button>
                   <button
                     type="button"
@@ -395,7 +411,7 @@
                     data-text="Useless product, very bad product its only a noisy fan and leaked water everywhere!"
                   >
                     <i data-lucide="x" class="w-3 h-3 text-accent-coral"></i>
-                    <span>Product Malfunction</span>
+                    <span data-i18n="preset_neg">Product Malfunction</span>
                   </button>
                   <button
                     type="button"
@@ -403,7 +419,7 @@
                     data-text="The product quality is good but power of air is decent, okay for the price."
                   >
                     <i data-lucide="minus" class="w-3 h-3 text-slate-500"></i>
-                    <span>Moderate Feedback</span>
+                    <span data-i18n="preset_neu">Moderate Feedback</span>
                   </button>
                 </div>
               </div>
@@ -414,7 +430,7 @@
                 class="w-full py-2.5 px-4 bg-primary-dark hover:bg-primary-dark-hover text-mint-light font-semibold text-xs rounded-xl shadow-sm hover:shadow transition flex items-center justify-center space-x-2 disabled:opacity-50"
               >
                 <i data-lucide="cpu" class="w-4 h-4"></i>
-                <span>Analyze Review</span>
+                <span data-i18n="analyze_btn">Analyze Review</span>
               </button>
             </form>
           </div>
@@ -422,26 +438,30 @@
           <!-- Single Analysis Results Box -->
           <div id="single-result-card" class="mt-6 pt-5 border-t border-slate-100 hidden">
             <div class="flex items-center justify-between mb-2.5">
-              <span class="text-[11px] font-bold uppercase tracking-wider text-primary-dark">Model Inference Result</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-primary-dark" data-i18n="result_title">Model Inference Result</span>
               <span id="result-timestamp" class="text-[10px] text-slate-400 font-mono"></span>
             </div>
 
             <div class="p-4 rounded-xl bg-off-white border border-mint-light space-y-2.5 text-xs">
               <div class="flex items-center justify-between">
-                <span class="text-slate-500 font-medium">Sentiment Classification</span>
+                <span class="text-slate-500 font-medium" data-i18n="result_sent">Sentiment Classification</span>
                 <span id="res-sentiment-badge" class="px-2.5 py-0.5 rounded-full font-bold text-[11px]"></span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-slate-500 font-medium">Confidence Score</span>
+                <span class="text-slate-500 font-medium" data-i18n="result_conf">Confidence Score</span>
                 <span id="res-confidence" class="font-bold text-primary-dark font-mono"></span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-slate-500 font-medium">Identified Topic</span>
+                <span class="text-slate-500 font-medium" data-i18n="result_topic">Identified Topic</span>
                 <span id="res-topic" class="font-semibold px-2 py-0.5 rounded bg-mint-light text-primary-dark border border-mint-accent"></span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-slate-500 font-medium">Urgency Classification</span>
+                <span class="text-slate-500 font-medium" data-i18n="result_urg">Urgency Classification</span>
                 <span id="res-urgency" class="font-semibold px-2 py-0.5 rounded text-[11px]"></span>
+              </div>
+              <div id="res-tips-box" class="pt-2 border-t border-slate-200 mt-2 hidden">
+                <span class="text-[11px] font-bold text-primary-dark block mb-1" data-i18n="th_tips">Actionable AI Tips</span>
+                <div id="res-tips-list" class="space-y-1 text-[11px] text-slate-700"></div>
               </div>
             </div>
           </div>
@@ -455,13 +475,13 @@
                 <div class="w-8 h-8 rounded-xl bg-primary-dark text-mint-light flex items-center justify-center">
                   <i data-lucide="database" class="w-4 h-4"></i>
                 </div>
-                <h3 class="text-sm font-bold text-primary-dark">CSV Dataset Analysis</h3>
+                <h3 class="text-sm font-bold text-primary-dark" data-i18n="csv_title">CSV Dataset Analysis</h3>
               </div>
-              <span class="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-mint-light text-primary-dark border border-mint-accent">
+              <span class="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-mint-light text-primary-dark border border-mint-accent" data-i18n="csv_badge">
                 Batch
               </span>
             </div>
-            <p class="text-xs text-slate-500 mb-6">Process customer review callouts from the project root <code class="bg-slate-100 px-1 py-0.5 rounded text-primary-dark font-mono">dataset.csv</code> or upload a custom CSV dataset.</p>
+            <p class="text-xs text-slate-500 mb-6" data-i18n="csv_desc">Process customer review callouts from the project root <code class="bg-slate-100 px-1 py-0.5 rounded text-primary-dark font-mono">dataset.csv</code> or upload a custom CSV dataset.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Option 1: Load Root dataset.csv -->
@@ -469,18 +489,18 @@
                 <div>
                   <div class="flex items-center space-x-2 mb-1.5">
                     <i data-lucide="folder-git-2" class="w-4 h-4 text-primary-dark"></i>
-                    <h4 class="text-xs font-bold text-primary-dark">Root dataset.csv</h4>
+                    <h4 class="text-xs font-bold text-primary-dark" data-i18n="csv_root">Root dataset.csv</h4>
                   </div>
-                  <p class="text-[11px] text-slate-500 mb-4 leading-relaxed">Stream and classify Flipkart customer feedback from local project directory.</p>
+                  <p class="text-[11px] text-slate-500 mb-4 leading-relaxed" data-i18n="csv_root_desc">Stream and classify Flipkart customer feedback from local project directory.</p>
                 </div>
                 <div class="space-y-3">
                   <div class="flex items-center space-x-2">
-                    <label for="batch-limit-select" class="text-xs text-slate-600 font-medium">Limit:</label>
+                    <label for="batch-limit-select" class="text-xs text-slate-600 font-medium" data-i18n="csv_limit">Limit:</label>
                     <select id="batch-limit-select" class="text-xs rounded-lg border border-slate-200 py-1 px-2.5 bg-white text-slate-700 focus:outline-none focus:border-primary-dark">
-                      <option value="5">5 reviews (Fast)</option>
-                      <option value="10" selected>10 reviews</option>
-                      <option value="15">15 reviews</option>
-                      <option value="25">25 reviews</option>
+                      <option value="5" data-i18n="csv_opt_fast">5 reviews (Fast)</option>
+                      <option value="10" selected data-i18n="csv_opt_10">10 reviews</option>
+                      <option value="15" data-i18n="csv_opt_15">15 reviews</option>
+                      <option value="25" data-i18n="csv_opt_25">25 reviews</option>
                     </select>
                   </div>
                   <button
@@ -488,7 +508,7 @@
                     class="w-full py-2 px-3 bg-primary-dark hover:bg-primary-dark-hover text-mint-light rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 shadow-sm transition"
                   >
                     <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                    <span>Process Root Dataset</span>
+                    <span data-i18n="csv_run">Process Root Dataset</span>
                   </button>
                 </div>
               </div>
@@ -498,9 +518,9 @@
                 <div>
                   <div class="flex items-center space-x-2 mb-1.5">
                     <i data-lucide="file-up" class="w-4 h-4 text-accent-coral"></i>
-                    <h4 class="text-xs font-bold text-primary-dark">Upload CSV Dataset</h4>
+                    <h4 class="text-xs font-bold text-primary-dark" data-i18n="csv_upload_title">Upload CSV Dataset</h4>
                   </div>
-                  <p class="text-[11px] text-slate-500 mb-4 leading-relaxed">Support for custom CSV files with columns such as Review, Summary, or Feedback.</p>
+                  <p class="text-[11px] text-slate-500 mb-4 leading-relaxed" data-i18n="csv_upload_desc">Support for custom CSV files with columns such as Review, Summary, or Feedback.</p>
                 </div>
                 <div>
                   <input type="file" id="csv-file-input" accept=".csv" class="hidden">
@@ -510,7 +530,7 @@
                     class="w-full py-2 px-3 bg-accent-coral hover:bg-accent-coral-hover text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 shadow-sm transition"
                   >
                     <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                    <span id="upload-btn-label">Select CSV File</span>
+                    <span id="upload-btn-label" data-i18n="csv_select">Select CSV File</span>
                   </button>
                 </div>
               </div>
@@ -540,9 +560,9 @@
               <div class="w-8 h-8 rounded-xl bg-mint-light text-primary-dark flex items-center justify-center">
                 <i data-lucide="pie-chart" class="w-4 h-4"></i>
               </div>
-              <h3 class="text-sm font-bold text-primary-dark">Sentiment Distribution</h3>
+              <h3 class="text-sm font-bold text-primary-dark" data-i18n="chart1_title">Sentiment Distribution</h3>
             </div>
-            <span class="text-[11px] font-medium text-slate-400">Class Proportions</span>
+            <span class="text-[11px] font-medium text-slate-400" data-i18n="chart1_sub">Class Proportions</span>
           </div>
           <div class="relative h-64 flex items-center justify-center">
             <canvas id="sentimentChart"></canvas>
@@ -556,9 +576,9 @@
               <div class="w-8 h-8 rounded-xl bg-primary-dark text-mint-light flex items-center justify-center">
                 <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
               </div>
-              <h3 class="text-sm font-bold text-primary-dark">Top Feedback Topics</h3>
+              <h3 class="text-sm font-bold text-primary-dark" data-i18n="chart2_title">Top Feedback Topics</h3>
             </div>
-            <span class="text-[11px] font-medium text-slate-400">Issue Categorization</span>
+            <span class="text-[11px] font-medium text-slate-400" data-i18n="chart2_sub">Issue Categorization</span>
           </div>
           <div class="relative h-64">
             <canvas id="topicsChart"></canvas>
@@ -570,16 +590,16 @@
       <section class="bg-white rounded-3xl p-6 card-elevated border border-mint-light/70">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
           <div>
-            <h3 class="text-sm font-bold text-primary-dark">Classified Customer Records</h3>
-            <p class="text-xs text-slate-400">Detailed inspection of model confidence scores, detected themes, and ground truth</p>
+            <h3 class="text-sm font-bold text-primary-dark" data-i18n="table_title">Classified Customer Records</h3>
+            <p class="text-xs text-slate-400" data-i18n="table_sub">Detailed inspection of model confidence scores, detected themes, and ground truth</p>
           </div>
 
           <!-- Filter Chips -->
           <div class="flex items-center space-x-1.5">
-            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary-dark text-mint-light transition" data-filter="all">All</button>
-            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="POSITIVE">Positive</button>
-            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="NEGATIVE">Negative</button>
-            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="HIGH">High Urgency</button>
+            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary-dark text-mint-light transition" data-filter="all" data-i18n="chip_all">All</button>
+            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="POSITIVE" data-i18n="chip_pos">Positive</button>
+            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="NEGATIVE" data-i18n="chip_neg">Negative</button>
+            <button class="filter-chip px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition" data-filter="HIGH" data-i18n="chip_high">High Urgency</button>
           </div>
         </div>
 
@@ -593,6 +613,7 @@
               type="text"
               id="records-search"
               placeholder="Search by keyword, product, or topic..."
+              data-i18n-placeholder="search_placeholder"
               class="w-full text-xs rounded-xl border border-slate-200 pl-9 pr-3 py-2 bg-off-white text-slate-800 placeholder-slate-400 focus:outline-none focus:border-primary-dark focus:ring-1 focus:ring-primary-dark transition"
             >
           </div>
@@ -602,7 +623,7 @@
             class="py-2 px-4 bg-primary-dark hover:bg-primary-dark-hover text-mint-light rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 shadow-sm transition"
           >
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Export CSV / Report</span>
+            <span data-i18n="export_btn">Export CSV / Report</span>
           </button>
         </div>
 
@@ -611,17 +632,18 @@
             <thead class="bg-off-white text-primary-dark uppercase font-bold text-[11px] tracking-wider border-b border-slate-100">
               <tr>
                 <th class="py-3 px-3">#</th>
-                <th class="py-3 px-3">Product / Headline</th>
-                <th class="py-3 px-3">Customer Feedback</th>
-                <th class="py-3 px-3">Category Topic</th>
-                <th class="py-3 px-3">Urgency</th>
-                <th class="py-3 px-3">Sentiment</th>
-                <th class="py-3 px-3">Confidence</th>
+                <th class="py-3 px-3" data-i18n="th_product">Product / Headline</th>
+                <th class="py-3 px-3" data-i18n="th_feedback">Customer Feedback</th>
+                <th class="py-3 px-3" data-i18n="th_topic">Category Topic</th>
+                <th class="py-3 px-3" data-i18n="th_urgency">Urgency</th>
+                <th class="py-3 px-3" data-i18n="th_sentiment">Sentiment</th>
+                <th class="py-3 px-3" data-i18n="th_conf">Confidence</th>
+                <th class="py-3 px-3" data-i18n="th_tips">Improvement Tips</th>
               </tr>
             </thead>
             <tbody id="reviews-table-body" class="divide-y divide-slate-100">
               <tr>
-                <td colspan="7" class="py-8 text-center text-slate-400">
+                <td colspan="8" class="py-8 text-center text-slate-400">
                   No dataset loaded yet. Click <strong>"Process Root Dataset"</strong> above to load records.
                 </td>
               </tr>
@@ -633,14 +655,94 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-mint-light/60 bg-white py-6 mt-12 text-center text-xs text-slate-400">
-      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p>SentimentPulse Analytics</p>
-        <p class="text-[11px]">Miami Nights palette</p>
+    <footer class="border-t border-mint-light/60 bg-white py-6 mt-12 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 font-medium">
+        <p data-i18n="footer">SentimentPulse Analytics. Enterprise Customer Intelligence Platform.</p>
+        <p class="text-[11px] text-slate-400 font-mono">v2.0 • AI-Driven Feedback Automation</p>
       </div>
     </footer>
 
   </div>
+
+  <!-- ================= FLOATING AI ASSISTANT CHATBOT ================= -->
+  <!-- Launcher Button -->
+  <button
+    id="chat-launcher-btn"
+    title="Open AI Sentiment Assistant"
+    class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-2xl bg-primary-dark hover:bg-primary-dark-hover text-mint-light shadow-xl shadow-primary-dark/25 flex items-center justify-center transition-all duration-300 transform hover:scale-105"
+  >
+    <i data-lucide="bot" class="w-6 h-6"></i>
+    <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-accent-coral border-2 border-white"></span>
+  </button>
+
+  <!-- Expandable Chat Panel -->
+  <div
+    id="chat-panel"
+    class="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-2rem)] h-[540px] bg-white rounded-3xl shadow-2xl border border-mint-light/80 flex flex-col overflow-hidden transition-all duration-300 transform scale-95 opacity-0 pointer-events-none"
+  >
+    <!-- Chat Header -->
+    <div class="px-5 py-4 bg-primary-dark text-white flex items-center justify-between shadow-sm">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-xl bg-mint-light text-primary-dark flex items-center justify-center font-bold">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold leading-tight" data-i18n="chat_header_title">AI Sentiment Bot</h4>
+          <p class="text-[10px] text-mint-light/80" data-i18n="chat_header_sub">Paste reviews for live tips & classification</p>
+        </div>
+      </div>
+      <button id="chat-close-btn" class="text-mint-light/80 hover:text-white p-1 rounded-lg transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Chat Messages Feed -->
+    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-3 bg-off-white text-xs">
+      <!-- Bot Welcome Message -->
+      <div class="flex items-start space-x-2">
+        <div class="w-6 h-6 rounded-lg bg-primary-dark text-mint-light flex items-center justify-center flex-shrink-0 mt-0.5">
+          <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+        </div>
+        <div class="p-3 rounded-2xl bg-white border border-slate-200 text-slate-700 shadow-sm max-w-[85%] leading-relaxed" id="chat-welcome-text">
+          Hello! I am your AI Sentiment Assistant. Paste any customer review or feedback here, and I will instantly classify sentiment, determine urgency, and provide targeted product improvement tips.
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Quick Prompts -->
+    <div class="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar">
+      <button type="button" class="chat-prompt-chip text-[10px] whitespace-nowrap px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-primary-dark hover:text-primary-dark transition text-slate-600 font-medium" data-prompt="Motor failed in 2 days and the water tank leaked all over the floor!">
+        Defective cooling & leak
+      </button>
+      <button type="button" class="chat-prompt-chip text-[10px] whitespace-nowrap px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-primary-dark hover:text-primary-dark transition text-slate-600 font-medium" data-prompt="Super airflow and extremely silent, works like a charm!">
+        High satisfaction review
+      </button>
+      <button type="button" class="chat-prompt-chip text-[10px] whitespace-nowrap px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-primary-dark hover:text-primary-dark transition text-slate-600 font-medium" data-prompt="Plastic quality is average and hinge feels delicate.">
+        Build quality concern
+      </button>
+    </div>
+
+    <!-- Chat Input Form -->
+    <form id="chat-input-form" class="p-3 bg-white border-t border-slate-100 flex items-center space-x-2">
+      <input
+        type="text"
+        id="chat-input"
+        required
+        autocomplete="off"
+        placeholder="Paste a review to analyze..."
+        data-i18n-placeholder="chat_input_placeholder"
+        class="flex-1 text-xs rounded-xl border border-slate-200 px-3.5 py-2.5 bg-off-white text-slate-800 placeholder-slate-400 focus:outline-none focus:border-primary-dark focus:ring-1 focus:ring-primary-dark transition"
+      >
+      <button
+        type="submit"
+        id="chat-send-btn"
+        class="w-9 h-9 rounded-xl bg-primary-dark hover:bg-primary-dark-hover text-mint-light flex items-center justify-center transition flex-shrink-0 shadow-sm"
+      >
+        <i data-lucide="send" class="w-4 h-4"></i>
+      </button>
+    </form>
+  </div>
+
 
 
   <!-- ================= CLIENT JAVASCRIPT ================= -->
@@ -1067,16 +1169,16 @@
 
     // ================= 3b. DEFAULT KAGGLE SAMPLE DATASET =================
     const DEFAULT_SAMPLE_REVIEWS = [
-      { id: 1, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Excellent cooling performance', text: 'Super! great cooler excellent air flow and for this price its so amazing and unbelievable just love it', rating: '5', sentiment: 'POSITIVE', score: 0.98, topic: 'Performance & Cooling', urgency: 'Low', groundTruth: 'Positive' },
-      { id: 2, product: 'Bajaj PX97 Torque New 36 L Room Air Cooler', headline: 'Value for money', text: 'Best cooler in this budget, air throw is superb and noise is very low even at high speed', rating: '5', sentiment: 'POSITIVE', score: 0.96, topic: 'Pricing & Value', urgency: 'Low', groundTruth: 'Positive' },
-      { id: 3, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Fast delivery, genuine product', text: 'Delivery was fast and packaging was intact, product works perfectly after a week of use', rating: '4', sentiment: 'POSITIVE', score: 0.93, topic: 'Packaging & Delivery', urgency: 'Low', groundTruth: 'Positive' },
-      { id: 4, product: 'Symphony Ice Cube 27 L Personal Air Cooler', headline: 'Stylish and compact design', text: 'Looks premium and compact, fits perfectly in my room corner and the finish is neat', rating: '4', sentiment: 'POSITIVE', score: 0.91, topic: 'Design & Build', urgency: 'Low', groundTruth: 'Positive' },
-      { id: 5, product: 'Bajaj PX97 Torque New 36 L Room Air Cooler', headline: 'Great purchase', text: 'Worth every rupee, cooling is consistent even in 40 degree heat and power consumption is low', rating: '5', sentiment: 'POSITIVE', score: 0.89, topic: 'Performance & Cooling', urgency: 'Low', groundTruth: 'Positive' },
-      { id: 6, product: 'Symphony Ice Cube 27 L Personal Air Cooler', headline: 'Average performance', text: 'The product quality is good but power of air is decent, okay for the price.', rating: '3', sentiment: 'NEUTRAL', score: 0.55, topic: 'Performance & Cooling', urgency: 'Low', groundTruth: 'Neutral' },
-      { id: 7, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Service response is okay', text: 'Support team responded in two days, replacement process is still ongoing, product itself is fine', rating: '3', sentiment: 'NEUTRAL', score: 0.52, topic: 'Customer Support', urgency: 'Low', groundTruth: 'Neutral' },
-      { id: 8, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Useless product', text: 'Useless product, very bad product its only a noisy fan and leaked water everywhere!', rating: '1', sentiment: 'NEGATIVE', score: 0.9, topic: 'Performance & Cooling', urgency: 'High', groundTruth: 'Negative' },
-      { id: 9, product: 'Bajaj PX97 Torque New 36 L Room Air Cooler', headline: 'Defective motor', text: 'Defective piece received, motor stopped working in 3 days and service center refuses refund', rating: '1', sentiment: 'NEGATIVE', score: 0.94, topic: 'Quality & Durability', urgency: 'High', groundTruth: 'Negative' },
-      { id: 10, product: 'Symphony Ice Cube 27 L Personal Air Cooler', headline: 'Damaged on arrival', text: 'Box arrived damaged with a cracked water tank, worst delivery experience, requesting immediate replacement', rating: '2', sentiment: 'NEGATIVE', score: 0.88, topic: 'Packaging & Delivery', urgency: 'High', groundTruth: 'Negative' }
+      { id: 1, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Excellent cooling performance', text: 'Super! great cooler excellent air flow and for this price its so amazing and unbelievable just love it', rating: '5', sentiment: 'POSITIVE', score: 0.98, topic: 'Performance & Cooling', urgency: 'Low', groundTruth: 'Positive', tips: ['Maintain cooling pad honeycomb density across production batches', 'Highlight silent motor CFM performance in digital campaign'] },
+      { id: 2, product: 'Bajaj PX97 Torque New 36 L Room Air Cooler', headline: 'Value for money', text: 'Best cooler in this budget, air throw is superb and noise is very low even at high speed', rating: '5', sentiment: 'POSITIVE', score: 0.96, topic: 'Pricing & Value', urgency: 'Low', groundTruth: 'Positive', tips: ['Benchmark feature-to-price ratio against competing models', 'Promote low power consumption metric in promotional listings'] },
+      { id: 3, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Fast delivery, genuine product', text: 'Delivery was fast and packaging was intact, product works perfectly after a week of use', rating: '4', sentiment: 'POSITIVE', score: 0.93, topic: 'Packaging & Delivery', urgency: 'Low', groundTruth: 'Positive', tips: ['Maintain current double-corrugated outer box packaging standard', 'Retain preferred 3PL regional logistics partner for rapid delivery'] },
+      { id: 4, product: 'Symphony Ice Cube 27 L Personal Air Cooler', headline: 'Stylish and compact design', text: 'Looks premium and compact, fits perfectly in my room corner and the finish is neat', rating: '4', sentiment: 'POSITIVE', score: 0.91, topic: 'Design & Build', urgency: 'Low', groundTruth: 'Positive', tips: ['Preserve compact footprint in subsequent product revisions', 'Explore additional matte color variants to broaden appeal'] },
+      { id: 5, product: 'Bajaj PX97 Torque New 36 L Room Air Cooler', headline: 'Great purchase', text: 'Worth every rupee, cooling is consistent even in 40 degree heat and power consumption is low', rating: '5', sentiment: 'POSITIVE', score: 0.89, topic: 'Performance & Cooling', urgency: 'Low', groundTruth: 'Positive', tips: ['Document ambient 40-degree temperature benchmark in marketing data', 'Feature inverter-compatible low wattage prominently'] },
+      { id: 6, product: 'Symphony Ice Cube 27 L Personal Air Cooler', headline: 'Average performance', text: 'The product quality is good but power of air is decent, okay for the price.', rating: '3', sentiment: 'NEUTRAL', score: 0.55, topic: 'Performance & Cooling', urgency: 'Low', groundTruth: 'Neutral', tips: ['Optimize fan blade pitch angle to increase air velocity by 15%', 'Clarify ideal square footage recommendation in user manual'] },
+      { id: 7, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Service response is okay', text: 'Support team responded in two days, replacement process is still ongoing, product itself is fine', rating: '3', sentiment: 'NEUTRAL', score: 0.52, topic: 'Customer Support', urgency: 'Low', groundTruth: 'Neutral', tips: ['Reduce initial customer support response SLA to under 4 hours', 'Deploy automated SMS/WhatsApp milestone updates for replacement tickets'] },
+      { id: 8, product: 'Candes 12 L Room/Personal Air Cooler', headline: 'Useless product', text: 'Useless product, very bad product its only a noisy fan and leaked water everywhere!', rating: '1', sentiment: 'NEGATIVE', score: 0.9, topic: 'Performance & Cooling', urgency: 'High', groundTruth: 'Negative', tips: ['Reinforce water reservoir ultrasonic weld seams and add anti-leak silicone gaskets', 'Install acoustic vibration dampening motor mounts to eliminate fan rattle', 'Implement automated thermal cut-off relay to prevent pump burnout'] },
+      { id: 9, product: 'Bajaj PX97 Torque New 36 L Room Air Cooler', headline: 'Defective motor', text: 'Defective piece received, motor stopped working in 3 days and service center refuses refund', rating: '1', sentiment: 'NEGATIVE', score: 0.94, topic: 'Quality & Durability', urgency: 'High', groundTruth: 'Negative', tips: ['Institute 100% pre-dispatch motor burn-in and winding insulation stress testing', 'Empower regional service centers to approve immediate replacement for DOA units', 'Upgrade copper winding gauge in fan motor to withstand voltage spikes'] },
+      { id: 10, product: 'Symphony Ice Cube 27 L Personal Air Cooler', headline: 'Damaged on arrival', text: 'Box arrived damaged with a cracked water tank, worst delivery experience, requesting immediate replacement', rating: '2', sentiment: 'NEGATIVE', score: 0.88, topic: 'Packaging & Delivery', urgency: 'High', groundTruth: 'Negative', tips: ['Upgrade transit packaging with 30mm molded high-density EPE foam corner caps', 'Add tamper-evident shock and tilt indicator labels to outer shipping carton', 'Audit courier transport handling procedures for fragile appliance payloads'] }
     ];
 
     function computeKPIs(reviews) {
@@ -1137,9 +1239,11 @@
       lastRenderedRows = filtered;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">No records found matching the selected filter or search term.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-400">No records found matching the selected filter or search term.</td></tr>`;
         return;
       }
+
+      const currentLang = localStorage.getItem('sentimentpulse_lang') || 'en';
 
       filtered.forEach((r, idx) => {
         const tr = document.createElement('tr');
@@ -1159,23 +1263,47 @@
 
         const scorePct = Math.round(r.score * 100);
 
+        const sentimentText = getLocalizedSentiment(r.sentiment, currentLang);
+        const urgencyText = getLocalizedUrgency(r.urgency, currentLang);
+        const topicText = getLocalizedTopic(r.topic, currentLang);
+
+        // Render Actionable Product Improvement Tips Column (Column 8)
+        let tipsHtml = '';
+        if (r.tips && r.tips.length > 0) {
+          tipsHtml = `<div class="space-y-1 max-w-xs">` +
+            r.tips.map(tip => `
+              <div class="flex items-start space-x-1.5 text-[11px] text-slate-700 leading-snug">
+                <span class="text-accent-coral font-bold flex-shrink-0 mt-0.5">•</span>
+                <span>${tip}</span>
+              </div>
+            `).join('') +
+            `</div>`;
+        } else if (r.sentiment === 'POSITIVE') {
+          tipsHtml = `<div class="flex items-center space-x-1.5 text-[11px] text-primary-dark font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-mint-accent inline-block flex-shrink-0"></span>
+            <span>Benchmark standard quality</span>
+          </div>`;
+        } else {
+          tipsHtml = `<span class="text-slate-400 text-[11px] italic">No active risk flagged</span>`;
+        }
+
         tr.innerHTML = `
           <td class="py-3 px-3 font-mono text-slate-400 font-medium">${idx + 1}</td>
           <td class="py-3 px-3 max-w-[190px]">
             <div class="font-bold text-primary-dark truncate" title="${r.headline || r.product}">${r.headline || 'Review'}</div>
             <div class="text-[10px] text-slate-400 truncate" title="${r.product}">${r.product}</div>
           </td>
-          <td class="py-3 px-3 max-w-[280px]">
+          <td class="py-3 px-3 max-w-[260px]">
             <p class="line-clamp-2 text-slate-700" title="${r.text}">"${r.text}"</p>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
-            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-primary-dark/10 text-primary-dark border border-primary-dark/20">${r.topic}</span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-primary-dark/10 text-primary-dark border border-primary-dark/20">${topicText}</span>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
-            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${urgencyClass}">${r.urgency}</span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${urgencyClass}">${urgencyText}</span>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${sentimentClass}">${r.sentiment}</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${sentimentClass}">${sentimentText}</span>
           </td>
           <td class="py-3 px-3">
             <div class="flex items-center space-x-2">
@@ -1185,10 +1313,14 @@
               </div>
             </div>
           </td>
+          <td class="py-3 px-3 min-w-[240px]">
+            ${tipsHtml}
+          </td>
         `;
         tbody.appendChild(tr);
       });
     }
+
 
     function setPipelineStatus(message, isLoading = false) {
       document.getElementById('pipeline-status-text').textContent = message;
@@ -1244,6 +1376,21 @@
         );
 
         document.getElementById('result-timestamp').textContent = new Date().toLocaleTimeString();
+
+        // Render Actionable Tips in Single Result Card
+        const tipsBox = document.getElementById('res-tips-box');
+        const tipsList = document.getElementById('res-tips-list');
+        if (data.tips && data.tips.length > 0) {
+          tipsBox.classList.remove('hidden');
+          tipsList.innerHTML = data.tips.map(t => `
+            <div class="flex items-start space-x-1.5 text-[11px] text-slate-700">
+              <span class="text-accent-coral font-bold flex-shrink-0 mt-0.5">•</span>
+              <span>${t}</span>
+            </div>
+          `).join('');
+        } else {
+          tipsBox.classList.add('hidden');
+        }
       } catch (err) {
         alert('Analysis error: ' + err.message);
       } finally {
@@ -1364,11 +1511,640 @@
       URL.revokeObjectURL(url);
     });
 
+    // ================= 7. MULTI-LANGUAGE (i18n) ENGINE =================
+    const I18N_DICTIONARY = {
+      en: {
+        tagline: 'Customer Feedback & Topic Intelligence',
+        badge_dashboard: 'Dashboard',
+        card_total: 'Total Reviews',
+        card_analyzed: 'analyzed',
+        card_active: 'Active batch sample',
+        card_pos: 'Positive Share',
+        card_neg: 'Negative Share',
+        card_urg: 'High-Urgency Alerts',
+        card_action: 'action required',
+        card_urg_sub: 'Defects, safety & returns',
+        ws_title: 'Analysis Workspace',
+        ws_sub: 'Test a single review instantly, or classify a CSV dataset in batch.',
+        single_title: 'Single Review Test',
+        single_badge: 'HF Inference',
+        single_desc: 'Input raw customer feedback to perform instant sentiment classification, topic detection, and urgency assessment.',
+        single_label: 'Customer Review Content',
+        single_placeholder: 'Paste or write customer feedback here...',
+        presets_label: 'Example Presets:',
+        preset_pos: 'High Satisfaction',
+        preset_neg: 'Product Malfunction',
+        preset_neu: 'Moderate Feedback',
+        analyze_btn: 'Analyze Review',
+        result_title: 'Model Inference Result',
+        result_sent: 'Sentiment Classification',
+        result_conf: 'Confidence Score',
+        result_topic: 'Identified Topic',
+        result_urg: 'Urgency Classification',
+        csv_title: 'CSV Dataset Analysis',
+        csv_badge: 'Batch Mode',
+        csv_desc: 'Process customer review callouts from the project root dataset.csv or upload a custom CSV dataset.',
+        csv_root: 'Root dataset.csv',
+        csv_root_desc: 'Stream and classify Flipkart customer feedback from local project directory.',
+        csv_limit: 'Limit:',
+        csv_opt_fast: '5 reviews (Fast)',
+        csv_opt_10: '10 reviews',
+        csv_opt_15: '15 reviews',
+        csv_opt_25: '25 reviews',
+        csv_run: 'Process Root Dataset',
+        csv_upload_title: 'Upload CSV Dataset',
+        csv_upload_desc: 'Support for custom CSV files with columns such as Review, Summary, or Feedback.',
+        csv_select: 'Select CSV File',
+        chart1_title: 'Sentiment Distribution',
+        chart1_sub: 'Class Proportions',
+        chart2_title: 'Top Feedback Topics',
+        chart2_sub: 'Issue Categorization',
+        table_title: 'Classified Customer Records',
+        table_sub: 'Detailed inspection of model confidence scores, detected themes, and ground truth',
+        chip_all: 'All',
+        chip_pos: 'Positive',
+        chip_neg: 'Negative',
+        chip_high: 'High Urgency',
+        search_placeholder: 'Search by keyword, product, or topic...',
+        export_btn: 'Export CSV / Report',
+        th_product: 'Product / Headline',
+        th_feedback: 'Customer Feedback',
+        th_topic: 'Category Topic',
+        th_urgency: 'Urgency',
+        th_sentiment: 'Sentiment',
+        th_conf: 'Confidence',
+        th_tips: 'Improvement Tips',
+        footer: 'SentimentPulse Analytics. Enterprise Customer Intelligence Platform.',
+        chat_header_title: 'AI Sentiment Bot',
+        chat_header_sub: 'Paste reviews for live tips & classification',
+        chat_welcome: 'Hello! I am your AI Sentiment Assistant. Paste any customer review or feedback here, and I will instantly classify sentiment, determine urgency, and provide targeted product improvement tips.',
+        chat_input_placeholder: 'Paste a review to analyze...'
+      },
+      hi: {
+        tagline: 'ग्राहक प्रतिक्रिया एवं विषय विश्लेषण',
+        badge_dashboard: 'डैशबोर्ड',
+        card_total: 'कुल समीक्षाएं',
+        card_analyzed: 'विश्लेषित',
+        card_active: 'सक्रिय बैच नमूना',
+        card_pos: 'सकारात्मक हिस्सा',
+        card_neg: 'नकारात्मक हिस्सा',
+        card_urg: 'अति-आवश्यक अलर्ट',
+        card_action: 'कार्रवाई आवश्यक',
+        card_urg_sub: 'खराबी, सुरक्षा एवं वापसी',
+        ws_title: 'विश्लेषण कार्यक्षेत्र',
+        ws_sub: 'किसी भी समीक्षा का तुरंत परीक्षण करें, या बैच में सीएसवी डेटासेट वर्गीकृत करें।',
+        single_title: 'एकल समीक्षा परीक्षण',
+        single_badge: 'एचएफ अनुमान',
+        single_desc: 'त्वरित भावना वर्गीकरण, विषय पहचान और तात्कालिकता जांच के लिए ग्राहक प्रतिक्रिया दर्ज करें।',
+        single_label: 'ग्राहक समीक्षा सामग्री',
+        single_placeholder: 'यहाँ ग्राहक समीक्षा लिखें या पेस्ट करें...',
+        presets_label: 'उदाहरण संकेत:',
+        preset_pos: 'उच्च संतुष्टि',
+        preset_neg: 'उत्पाद खराबी',
+        preset_neu: 'मध्यम प्रतिक्रिया',
+        analyze_btn: 'समीक्षा का विश्लेषण करें',
+        result_title: 'मॉडल अनुमान परिणाम',
+        result_sent: 'भावना वर्गीकरण',
+        result_conf: 'विश्वास स्कोर',
+        result_topic: 'पहचाना गया विषय',
+        result_urg: 'तात्कालिकता स्तर',
+        csv_title: 'सीएसवी डेटासेट विश्लेषण',
+        csv_badge: 'बैच मोड',
+        csv_desc: 'रूट dataset.csv से समीक्षाएं प्रोसेस करें या कस्टम सीएसवी अपलोड करें।',
+        csv_root: 'रूट dataset.csv',
+        csv_root_desc: 'लोकल प्रोजेक्ट डायरेक्टरी से ग्राहक समीक्षाएं स्ट्रीम और वर्गीकृत करें।',
+        csv_limit: 'सीमा:',
+        csv_opt_fast: '5 समीक्षाएं (तेज़)',
+        csv_opt_10: '10 समीक्षाएं',
+        csv_opt_15: '15 समीक्षाएं',
+        csv_opt_25: '25 समीक्षाएं',
+        csv_run: 'रूट डेटासेट प्रोसेस करें',
+        csv_upload_title: 'सीएसवी डेटासेट अपलोड करें',
+        csv_upload_desc: 'Review, Summary, या Feedback कॉलम वाली कस्टम फाइलों का समर्थन।',
+        csv_select: 'सीएसवी फ़ाइल चुनें',
+        chart1_title: 'भावना वितरण',
+        chart1_sub: 'वर्ग अनुपात',
+        chart2_title: 'शीर्ष प्रतिक्रिया विषय',
+        chart2_sub: 'मुद्दा वर्गीकरण',
+        table_title: 'वर्गीकृत ग्राहक रिकॉर्ड्स',
+        table_sub: 'मॉडल विश्वास स्कोर, पहचाने गए विषय और उत्पाद सुधार सुझावों का विस्तृत निरीक्षण',
+        chip_all: 'सभी',
+        chip_pos: 'सकारात्मक',
+        chip_neg: 'नकारात्मक',
+        chip_high: 'अति-आवश्यक',
+        search_placeholder: 'कीवर्ड, उत्पाद या विषय द्वारा खोजें...',
+        export_btn: 'सीएसवी रिपोर्ट निर्यात करें',
+        th_product: 'उत्पाद / शीर्षक',
+        th_feedback: 'ग्राहक समीक्षा',
+        th_topic: 'श्रेणी विषय',
+        th_urgency: 'तात्कालिकता',
+        th_sentiment: 'भावना',
+        th_conf: 'विश्वास',
+        th_tips: 'सुधार सुझाव',
+        footer: 'SentimentPulse Analytics. एंटरप्राइज ग्राहक बुद्धिमत्ता मंच।',
+        chat_header_title: 'एआई सेंटिमेंट बॉट',
+        chat_header_sub: 'त्वरित सुझाव और वर्गीकरण के लिए समीक्षा पेस्ट करें',
+        chat_welcome: 'नमस्ते! मैं आपका एआई सेंटिमेंट असिस्टेंट हूँ। किसी भी समीक्षा को यहाँ पेस्ट करें, मैं तुरंत भावना, तात्कालिकता और उत्पाद सुधार सुझाव प्रदान करूँगा।',
+        chat_input_placeholder: 'समीक्षा यहाँ पेस्ट करें...'
+      },
+      mr: {
+        tagline: 'ग्राहक अभिप्राय आणि विषय बुद्धिमत्ता',
+        badge_dashboard: 'डॅशबोर्ड',
+        card_total: 'एकूण पुनरावलोकने',
+        card_analyzed: 'विश्लेषण केले',
+        card_active: 'सक्रिय बॅच नमुना',
+        card_pos: 'सकारात्मक प्रमाण',
+        card_neg: 'नकारात्मक प्रमाण',
+        card_urg: 'अति-तातडीचे इशारे',
+        card_action: 'कारवाई आवश्यक',
+        card_urg_sub: 'दोष, सुरक्षा आणि परतावा',
+        ws_title: 'विश्लेषण कार्यक्षेत्र',
+        ws_sub: 'एकाच पुनरावलोकनाची त्वरित चाचणी घ्या, किंवा बॅचमध्ये सीएसव्ही डेटासेट वर्गीकृत करा.',
+        single_title: 'एकल पुनरावलोकन चाचणी',
+        single_badge: 'एचएफ इन्फरन्स',
+        single_desc: 'त्वरित भावना वर्गीकरण, विषय ओळख आणि तातडीच्या मूल्यांकनासाठी ग्राहक अभिप्राय प्रविष्ट करा.',
+        single_label: 'ग्राहक पुनरावलोकन सामग्री',
+        single_placeholder: 'येथे ग्राहक अभिप्राय लिहा किंवा पेस्ट करा...',
+        presets_label: 'उदाहरण संकेत:',
+        preset_pos: 'उच्च समाधान',
+        preset_neg: 'उत्पादन दोष',
+        preset_neu: 'मध्यम अभिप्राय',
+        analyze_btn: 'पुनरावलोकनाचे विश्लेषण करा',
+        result_title: 'मॉडेल इन्फरन्स निकाल',
+        result_sent: 'भावना वर्गीकरण',
+        result_conf: 'विश्वासार्हता स्कोअर',
+        result_topic: 'ओळखलेला विषय',
+        result_urg: 'तातडीचे वर्गीकरण',
+        csv_title: 'सीएसव्ही डेटासेट विश्लेषण',
+        csv_badge: 'बॅच मोड',
+        csv_desc: 'रूट dataset.csv मधून पुनरावलोकने प्रक्रिया करा किंवा कस्टम सीएसव्ही अपलोड करा.',
+        csv_root: 'रूट dataset.csv',
+        csv_root_desc: 'स्थानिक प्रोजेक्ट निर्देशिकेतून ग्राहक अभिप्राय वर्गीकृत करा.',
+        csv_limit: 'मर्यादा:',
+        csv_opt_fast: '5 पुनरावलोकने (जलद)',
+        csv_opt_10: '10 पुनरावलोकने',
+        csv_opt_15: '15 पुनरावलोकने',
+        csv_opt_25: '25 पुनरावलोकने',
+        csv_run: 'रूट डेटासेट प्रक्रिया करा',
+        csv_upload_title: 'सीएसव्ही डेटासेट अपलोड करा',
+        csv_upload_desc: 'Review, Summary, किंवा Feedback स्तंभ असलेल्या फाइल्ससाठी समर्थन.',
+        csv_select: 'सीएसव्ही फाइल निवडा',
+        chart1_title: 'भावना वितरण',
+        chart1_sub: 'वर्ग प्रमाण',
+        chart2_title: 'प्रमुख अभिप्राय विषय',
+        chart2_sub: 'मुद्दा वर्गीकरण',
+        table_title: 'वर्गीकृत ग्राहक नोंदी',
+        table_sub: 'मॉडेल विश्वासार्हता, ओळखलेले विषय आणि सुधारणा टिप्सचे तपशीलवार निरीक्षण',
+        chip_all: 'सर्व',
+        chip_pos: 'सकारात्मक',
+        chip_neg: 'नकारात्मक',
+        chip_high: 'अति-तातडीचे',
+        search_placeholder: 'कीवर्ड, उत्पादन किंवा विषयानुसार शोधा...',
+        export_btn: 'सीएसव्ही अहवाल निर्यात करा',
+        th_product: 'उत्पादन / शीर्षक',
+        th_feedback: 'ग्राहक अभिप्राय',
+        th_topic: 'श्रेणी विषय',
+        th_urgency: 'तातडी',
+        th_sentiment: 'भावना',
+        th_conf: 'विश्वास',
+        th_tips: 'सुधारणा टिप्स',
+        footer: 'SentimentPulse Analytics. एंटरप्राइझ ग्राहक बुद्धिमत्ता प्लॅटफॉर्म.',
+        chat_header_title: 'एआय सेंटिमेंट बॉट',
+        chat_header_sub: 'थेट टिप्स आणि वर्गीकरणासाठी पुनरावलोकने पेस्ट करा',
+        chat_welcome: 'नमस्कार! मी तुमचा एआय सेंटिमेंट सहाय्यक आहे. येथे कोणताही ग्राहक अभिप्राय पेस्ट करा, मी लगेच भावना, तातडी आणि सुधारणा टिप्स देईन.',
+        chat_input_placeholder: 'अभिप्राय येथे पेस्ट करा...'
+      },
+      es: {
+        tagline: 'Inteligencia de comentarios y temas de clientes',
+        badge_dashboard: 'Panel',
+        card_total: 'Total Reseñas',
+        card_analyzed: 'analizadas',
+        card_active: 'Muestra de lote activa',
+        card_pos: 'Cuota Positiva',
+        card_neg: 'Cuota Negativa',
+        card_urg: 'Alertas de Alta Urgencia',
+        card_action: 'acción requerida',
+        card_urg_sub: 'Defectos, seguridad y devoluciones',
+        ws_title: 'Espacio de Análisis',
+        ws_sub: 'Pruebe una reseña al instante o clasifique un archivo CSV en lote.',
+        single_title: 'Prueba de Reseña Individual',
+        single_badge: 'Inferencia HF',
+        single_desc: 'Ingrese comentarios de clientes para realizar clasificación de sentimiento, detección de temas y evaluación de urgencia.',
+        single_label: 'Contenido de la Reseña',
+        single_placeholder: 'Pegue o escriba los comentarios aquí...',
+        presets_label: 'Ejemplos Predefinidos:',
+        preset_pos: 'Alta Satisfacción',
+        preset_neg: 'Fallo de Producto',
+        preset_neu: 'Comentario Moderado',
+        analyze_btn: 'Analizar Reseña',
+        result_title: 'Resultado de Inferencia',
+        result_sent: 'Clasificación de Sentimiento',
+        result_conf: 'Puntuación de Confianza',
+        result_topic: 'Tema Identificado',
+        result_urg: 'Clasificación de Urgencia',
+        csv_title: 'Análisis de Dataset CSV',
+        csv_badge: 'Modo Lote',
+        csv_desc: 'Procese reseñas desde dataset.csv o suba un archivo CSV personalizado.',
+        csv_root: 'dataset.csv Raíz',
+        csv_root_desc: 'Transmita y clasifique comentarios de clientes desde el directorio local.',
+        csv_limit: 'Límite:',
+        csv_opt_fast: '5 reseñas (Rápido)',
+        csv_opt_10: '10 reseñas',
+        csv_opt_15: '15 reseñas',
+        csv_opt_25: '25 reseñas',
+        csv_run: 'Procesar Dataset Raíz',
+        csv_upload_title: 'Subir Dataset CSV',
+        csv_upload_desc: 'Soporte para archivos CSV personalizados con columnas como Review o Summary.',
+        csv_select: 'Seleccionar Archivo CSV',
+        chart1_title: 'Distribución de Sentimiento',
+        chart1_sub: 'Proporciones de Clase',
+        chart2_title: 'Principales Temas de Feedback',
+        chart2_sub: 'Categorización de Problemas',
+        table_title: 'Registros de Clientes Clasificados',
+        table_sub: 'Inspección detallada de puntuaciones, temas detectados y recomendaciones de mejora',
+        chip_all: 'Todos',
+        chip_pos: 'Positivo',
+        chip_neg: 'Negativo',
+        chip_high: 'Alta Urgencia',
+        search_placeholder: 'Buscar por palabra clave, producto o tema...',
+        export_btn: 'Exportar Reporte CSV',
+        th_product: 'Producto / Titular',
+        th_feedback: 'Comentario del Cliente',
+        th_topic: 'Tema de Categoría',
+        th_urgency: 'Urgencia',
+        th_sentiment: 'Sentimiento',
+        th_conf: 'Confianza',
+        th_tips: 'Consejos de Mejora',
+        footer: 'SentimentPulse Analytics. Plataforma de Inteligencia del Cliente.',
+        chat_header_title: 'Bot de Sentimiento IA',
+        chat_header_sub: 'Pegue reseñas para clasificación y consejos',
+        chat_welcome: '¡Hola! Soy su Asistente de Sentimiento IA. Pegue cualquier reseña para clasificarla al instante y recibir recomendaciones de mejora.',
+        chat_input_placeholder: 'Pegue una reseña para analizar...'
+      },
+      fr: {
+        tagline: 'Intelligence des retours et thématiques clients',
+        badge_dashboard: 'Tableau de bord',
+        card_total: 'Total Avis',
+        card_analyzed: 'analysés',
+        card_active: 'Échantillon de lot actif',
+        card_pos: 'Part Positive',
+        card_neg: 'Part Négative',
+        card_urg: "Alertes d'Urgence Élevée",
+        card_action: 'action requise',
+        card_urg_sub: 'Défauts, sécurité et retours',
+        ws_title: "Espace d'Analyse",
+        ws_sub: 'Testez un avis instantanément ou classez un jeu de données CSV par lot.',
+        single_title: "Test d'Avis Individuel",
+        single_badge: 'Inférence HF',
+        single_desc: 'Entrez les commentaires des clients pour obtenir une classification instantanée des sentiments, thèmes et urgences.',
+        single_label: "Contenu de l'Avis Client",
+        single_placeholder: 'Collez ou écrivez les commentaires ici...',
+        presets_label: 'Exemples Prédéfinis :',
+        preset_pos: 'Haute Satisfaction',
+        preset_neg: 'Dysfonctionnement Produit',
+        preset_neu: 'Retour Modéré',
+        analyze_btn: "Analyser l'Avis",
+        result_title: "Résultat d'Inférence du Modèle",
+        result_sent: 'Classification du Sentiment',
+        result_conf: 'Score de Confiance',
+        result_topic: 'Thème Identifié',
+        result_urg: "Niveau d'Urgence",
+        csv_title: 'Analyse de Jeu de Données CSV',
+        csv_badge: 'Mode Lot',
+        csv_desc: 'Traitez les avis depuis dataset.csv ou téléchargez un CSV personnalisé.',
+        csv_root: 'dataset.csv Racine',
+        csv_root_desc: 'Analysez et classez les retours clients depuis le répertoire local.',
+        csv_limit: 'Limite :',
+        csv_opt_fast: '5 avis (Rapide)',
+        csv_opt_10: '10 avis',
+        csv_opt_15: '15 avis',
+        csv_opt_25: '25 avis',
+        csv_run: 'Traiter le Dataset Racine',
+        csv_upload_title: 'Télécharger Dataset CSV',
+        csv_upload_desc: 'Prise en charge des fichiers CSV avec colonnes Review, Summary ou Feedback.',
+        csv_select: 'Sélectionner Fichier CSV',
+        chart1_title: 'Distribution des Sentiments',
+        chart1_sub: 'Proportions des Classes',
+        chart2_title: 'Principaux Thèmes de Retours',
+        chart2_sub: 'Catégorisation des Problèmes',
+        table_title: 'Enregistrements Clients Classés',
+        table_sub: 'Inspection détaillée des scores de confiance, thèmes détectés et recommandations',
+        chip_all: 'Tous',
+        chip_pos: 'Positif',
+        chip_neg: 'Négatif',
+        chip_high: 'Haute Urgence',
+        search_placeholder: 'Rechercher par mot-clé, produit ou thème...',
+        export_btn: 'Exporter le Rapport CSV',
+        th_product: 'Produit / Titre',
+        th_feedback: 'Retour Client',
+        th_topic: 'Thème de Catégorie',
+        th_urgency: 'Urgence',
+        th_sentiment: 'Sentiment',
+        th_conf: 'Confiance',
+        th_tips: "Conseils d'Amélioration",
+        footer: "SentimentPulse Analytics. Plateforme d'Intelligence Client.",
+        chat_header_title: 'Bot IA de Sentiment',
+        chat_header_sub: 'Collez des avis pour analyse et conseils',
+        chat_welcome: "Bonjour ! Je suis votre Assistant IA de Sentiment. Collez n'importe quel avis client pour une analyse immédiate et des conseils d'amélioration.",
+        chat_input_placeholder: 'Collez un avis à analyser...'
+      }
+    };
+
+    function getLocalizedSentiment(sentiment, lang) {
+      const map = {
+        en: { POSITIVE: 'POSITIVE', NEGATIVE: 'NEGATIVE', NEUTRAL: 'NEUTRAL' },
+        hi: { POSITIVE: 'सकारात्मक', NEGATIVE: 'नकारात्मक', NEUTRAL: 'तटस्थ' },
+        mr: { POSITIVE: 'सकारात्मक', NEGATIVE: 'नकारात्मक', NEUTRAL: 'तटस्थ' },
+        es: { POSITIVE: 'POSITIVO', NEGATIVE: 'NEGATIVO', NEUTRAL: 'NEUTRAL' },
+        fr: { POSITIVE: 'POSITIF', NEGATIVE: 'NÉGATIF', NEUTRAL: 'NEUTRE' }
+      };
+      return (map[lang] && map[lang][sentiment]) || sentiment;
+    }
+
+    function getLocalizedUrgency(urgency, lang) {
+      const map = {
+        en: { High: 'High', Medium: 'Medium', Low: 'Low' },
+        hi: { High: 'अति-आवश्यक', Medium: 'मध्यम', Low: 'निम्न' },
+        mr: { High: 'अति-तातडीचे', Medium: 'मध्यम', Low: 'कमी' },
+        es: { High: 'Alta', Medium: 'Media', Low: 'Baja' },
+        fr: { High: 'Élevée', Medium: 'Moyenne', Low: 'Faible' }
+      };
+      return (map[lang] && map[lang][urgency]) || urgency;
+    }
+
+    function getLocalizedTopic(topic, lang) {
+      const map = {
+        hi: {
+          'Quality & Durability': 'गुणवत्ता एवं टिकाऊपन',
+          'Performance & Cooling': 'प्रदर्शन एवं कूलिंग',
+          'Pricing & Value': 'मूल्य एवं किफ़ायत',
+          'Design & Build': 'डिज़ाइन एवं बनावट',
+          'Packaging & Delivery': 'पैकेजिंग एवं डिलीवरी',
+          'Customer Support': 'ग्राहक सेवा',
+          'General Feedback': 'सामान्य प्रतिक्रिया'
+        },
+        mr: {
+          'Quality & Durability': 'गुणवत्ता आणि टिकाऊपणा',
+          'Performance & Cooling': 'कार्यक्षमता आणि कूलिंग',
+          'Pricing & Value': 'किंमत आणि मूल्य',
+          'Design & Build': 'डिझाइन आणि बांधणी',
+          'Packaging & Delivery': 'पॅकेजिंग आणि वितरण',
+          'Customer Support': 'ग्राहक सेवा',
+          'General Feedback': 'सामान्य अभिप्राय'
+        },
+        es: {
+          'Quality & Durability': 'Calidad y Durabilidad',
+          'Performance & Cooling': 'Rendimiento y Refrigeración',
+          'Pricing & Value': 'Precio y Valor',
+          'Design & Build': 'Diseño y Estructura',
+          'Packaging & Delivery': 'Embalaje y Entrega',
+          'Customer Support': 'Soporte al Cliente',
+          'General Feedback': 'Comentarios Generales'
+        },
+        fr: {
+          'Quality & Durability': 'Qualité et Durabilité',
+          'Performance & Cooling': 'Performance et Refroidissement',
+          'Pricing & Value': 'Prix et Valeur',
+          'Design & Build': 'Design et Structure',
+          'Packaging & Delivery': 'Emballage et Livraison',
+          'Customer Support': 'Support Client',
+          'General Feedback': 'Retours Généraux'
+        }
+      };
+      return (map[lang] && map[lang][topic]) || topic;
+    }
+
+    function applyLanguage(lang) {
+      const dict = I18N_DICTIONARY[lang] || I18N_DICTIONARY.en;
+      localStorage.setItem('sentimentpulse_lang', lang);
+
+      // Update dropdown selection
+      const langSelect = document.getElementById('lang-select');
+      if (langSelect && langSelect.value !== lang) {
+        langSelect.value = lang;
+      }
+
+      // Update text nodes with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // Update placeholders with data-i18n-placeholder
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.placeholder = dict[key];
+        }
+      });
+
+      // Update Chatbot welcome text if not modified
+      const welcomeEl = document.getElementById('chat-welcome-text');
+      if (welcomeEl && dict.chat_welcome) {
+        welcomeEl.textContent = dict.chat_welcome;
+      }
+
+      // Re-render table to localize tags & topics
+      if (currentReviewsData && currentReviewsData.length > 0) {
+        renderReviewsTable(currentReviewsData, activeFilter);
+      }
+    }
+
+    const langSelectElement = document.getElementById('lang-select');
+    if (langSelectElement) {
+      langSelectElement.addEventListener('change', (e) => {
+        applyLanguage(e.target.value);
+      });
+    }
+
+
+    // ================= 8. INTERACTIVE AI CHATBOT ASSISTANT =================
+    const chatLauncherBtn = document.getElementById('chat-launcher-btn');
+    const chatPanel = document.getElementById('chat-panel');
+    const chatCloseBtn = document.getElementById('chat-close-btn');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInputForm = document.getElementById('chat-input-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    let isChatOpen = false;
+
+    function toggleChatPanel() {
+      isChatOpen = !isChatOpen;
+      if (isChatOpen) {
+        chatPanel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none');
+        chatPanel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto');
+        chatInput.focus();
+      } else {
+        chatPanel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto');
+        chatPanel.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+      }
+    }
+
+    if (chatLauncherBtn) chatLauncherBtn.addEventListener('click', toggleChatPanel);
+    if (chatCloseBtn) chatCloseBtn.addEventListener('click', toggleChatPanel);
+
+    // Quick prompt buttons in Chatbot
+    document.querySelectorAll('.chat-prompt-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const prompt = chip.getAttribute('data-prompt');
+        if (prompt) {
+          chatInput.value = prompt;
+          handleChatSubmit(prompt);
+        }
+      });
+    });
+
+    function appendUserMessage(text) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start justify-end space-x-2';
+      msgDiv.innerHTML = `
+        <div class="p-3 rounded-2xl bg-primary-dark text-mint-light max-w-[85%] leading-relaxed shadow-sm">
+          <p>${text}</p>
+        </div>
+      `;
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function appendTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.id = 'chat-typing-indicator';
+      typingDiv.className = 'flex items-start space-x-2';
+      typingDiv.innerHTML = `
+        <div class="w-6 h-6 rounded-lg bg-primary-dark text-mint-light flex items-center justify-center flex-shrink-0 mt-0.5">
+          <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+        </div>
+        <div class="p-3 rounded-2xl bg-white border border-slate-200 text-slate-500 shadow-sm flex items-center space-x-2">
+          <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-primary-dark"></i>
+          <span class="text-xs">Analyzing feedback & generating tips...</span>
+        </div>
+      `;
+      chatMessages.appendChild(typingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function removeTypingIndicator() {
+      const indicator = document.getElementById('chat-typing-indicator');
+      if (indicator) indicator.remove();
+    }
+
+    function appendBotResponse(analysis) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start space-x-2';
+
+      const sentimentClass = analysis.sentiment === 'POSITIVE'
+        ? 'bg-mint-light text-primary-dark border border-mint-accent'
+        : analysis.sentiment === 'NEGATIVE'
+        ? 'bg-soft-pink text-accent-coral border border-soft-pink-dark'
+        : 'bg-slate-100 text-slate-700 border border-slate-200';
+
+      const urgencyClass = analysis.urgency === 'High'
+        ? 'bg-soft-pink text-accent-coral font-bold border border-accent-coral'
+        : analysis.urgency === 'Medium'
+        ? 'bg-amber-50 text-amber-800 border border-amber-200'
+        : 'bg-off-white text-slate-600 border border-slate-200';
+
+      const scorePct = Math.round((analysis.score || 0.8) * 100);
+
+      let tipsListHtml = '';
+      if (analysis.tips && analysis.tips.length > 0) {
+        tipsListHtml = `
+          <div class="pt-2 border-t border-slate-100 mt-2">
+            <span class="text-[11px] font-bold text-primary-dark block mb-1">Recommended Actionable Tips:</span>
+            <ul class="space-y-1">
+              ${analysis.tips.map(t => `
+                <li class="flex items-start space-x-1.5 text-[11px] text-slate-700 leading-snug">
+                  <span class="text-accent-coral font-bold">•</span>
+                  <span>${t}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      msgDiv.innerHTML = `
+        <div class="w-6 h-6 rounded-lg bg-primary-dark text-mint-light flex items-center justify-center flex-shrink-0 mt-0.5">
+          <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 shadow-sm max-w-[90%] space-y-2 leading-relaxed">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${sentimentClass}">${analysis.sentiment} (${scorePct}%)</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${urgencyClass}">Urgency: ${analysis.urgency}</span>
+          </div>
+          <div class="text-[11px] text-slate-600">
+            <span class="font-semibold text-primary-dark">Topic:</span> ${analysis.topic}
+          </div>
+          ${tipsListHtml}
+        </div>
+      `;
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      lucide.createIcons();
+    }
+
+    async function handleChatSubmit(text) {
+      if (!text) return;
+      chatInput.value = '';
+      appendUserMessage(text);
+      appendTypingIndicator();
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        removeTypingIndicator();
+
+        if (data.analysis) {
+          appendBotResponse(data.analysis);
+        } else {
+          throw new Error(data.error || 'Invalid response');
+        }
+      } catch (err) {
+        // Graceful client-side fallback if server is restarting or network issue
+        removeTypingIndicator();
+        const lower = text.toLowerCase();
+        const isNeg = ['bad', 'defect', 'leak', 'useless', 'terrible', 'worst', 'broke', 'broken', 'poor', 'noise'].some(w => lower.includes(w));
+        const sentiment = isNeg ? 'NEGATIVE' : 'POSITIVE';
+        const urgency = isNeg ? 'High' : 'Low';
+        const topic = lower.includes('cooler') || lower.includes('leak') || lower.includes('noise') ? 'Performance & Cooling' : 'Quality & Durability';
+        const tips = isNeg ? [
+          'Reinforce ultrasonic seam welding and add silicone sealing gaskets',
+          'Install acoustic vibration dampening mounts on fan assembly',
+          'Conduct comprehensive drop and burn-in QA before dispatch'
+        ] : [
+          'Maintain high quality manufacturing standard across product batches',
+          'Highlight positive customer reviews in promotional listings'
+        ];
+        appendBotResponse({ sentiment, score: 0.92, urgency, topic, tips });
+      }
+    }
+
+    if (chatInputForm) {
+      chatInputForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = chatInput.value.trim();
+        if (text) handleChatSubmit(text);
+      });
+    }
+
+
     // On Load: Check if session exists or show auth screen
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('auth-name').value = '';
       document.getElementById('auth-identifier').value = '';
       document.getElementById('auth-password').value = '';
+
+      // Initialize selected language
+      const savedLang = localStorage.getItem('sentimentpulse_lang') || 'en';
+      applyLanguage(savedLang);
+
       const hasSession = checkActiveSession();
       if (!hasSession) {
         authView.classList.remove('is-hidden');

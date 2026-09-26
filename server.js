@@ -68,6 +68,57 @@ function detectUrgency(sentimentLabel, score, text, rating) {
   return 'Low';
 }
 
+// Helper: Actionable AI Product Improvement Tips Generator
+function generateImprovementTips(topic, sentimentLabel, text, urgency) {
+  const lower = (text || '').toLowerCase();
+  const tips = [];
+
+  if (sentimentLabel === 'POSITIVE' && urgency === 'Low') {
+    return [
+      'Maintain quality standards across manufacturing batches',
+      'Leverage positive customer highlights in marketing campaigns'
+    ];
+  }
+
+  // Domain-specific actionable engineering & QA tips based on detected topic and keywords:
+  if (topic === 'Performance & Cooling' || lower.includes('cooler') || lower.includes('cooling') || lower.includes('fan') || lower.includes('noise')) {
+    if (lower.includes('water') || lower.includes('leak')) {
+      tips.push('Reinforce water tank ultrasonic seams and add anti-leak silicone sealing gaskets');
+    } else {
+      tips.push('Upgrade motor stator insulation and optimize fan blade aerodynamics for higher CFM');
+    }
+    if (lower.includes('noise') || lower.includes('sound') || lower.includes('loud')) {
+      tips.push('Install acoustic vibration dampening mounts around the motor housing');
+    } else {
+      tips.push('Improve honeycomb cooling pad water distribution manifold to prevent dry spots');
+    }
+    tips.push('Implement automated thermal cut-off relay to prevent pump burnout');
+  } else if (topic === 'Quality & Durability' || lower.includes('plastic') || lower.includes('broke') || lower.includes('defect')) {
+    tips.push('Transition fragile casing components to high-impact ABS / polycarbonate polymer blend');
+    tips.push('Reinforce hinge pivot points and tray latch stress load tolerances');
+    tips.push('Institute 100% pre-dispatch drop, vibration, and continuous run load testing');
+  } else if (topic === 'Packaging & Delivery' || lower.includes('delivery') || lower.includes('damaged') || lower.includes('box')) {
+    tips.push('Upgrade interior corner protection with 30mm high-density molded EPE foam blocks');
+    tips.push('Apply impact shock sensor stickers on outer transit carton to identify logistics bottlenecks');
+    tips.push('Audit 3PL carrier handling standards for heavy appliances and delicate enclosures');
+  } else if (topic === 'Pricing & Value' || lower.includes('price') || lower.includes('waste')) {
+    tips.push('Bundle complimentary essential accessories (extended cord, spare filter) to elevate perceived value');
+    tips.push('Refine product listing specifications to set accurate customer performance expectations');
+    tips.push('Benchmark cost-performance specifications against top 3 competing market models');
+  } else if (topic === 'Customer Support' || lower.includes('support') || lower.includes('service') || lower.includes('refund')) {
+    tips.push('Establish a 24-hour turnaround SLA for warranty claim validations and part dispatch');
+    tips.push('Provide automated SMS and WhatsApp tracking updates for ongoing replacement requests');
+    tips.push('Deploy a proactive technician callback for unresolved high-urgency customer tickets');
+  } else {
+    tips.push('Conduct root-cause analysis on recurring component failure modes with manufacturing line');
+    tips.push('Update user manual with step-by-step visual troubleshooting and installation guides');
+    tips.push('Implement secondary QA checkpoint on final packaging line to eliminate DOA units');
+  }
+
+  return tips.slice(0, 3);
+}
+
+
 // Helper: Run Sentiment Analysis (HF with graceful local fallback)
 async function analyzeSentiment(text) {
   const cleanText = (text || '').trim();
@@ -308,6 +359,7 @@ app.post('/api/analyze', async (req, res) => {
     const sentimentResult = await analyzeSentiment(text);
     const topic = detectTopic(`${headline || ''} ${text}`);
     const urgency = detectUrgency(sentimentResult.label, sentimentResult.score, `${headline || ''} ${text}`, rating);
+    const tips = generateImprovementTips(topic, sentimentResult.label, `${headline || ''} ${text}`, urgency);
 
     res.json({
       success: true,
@@ -318,6 +370,7 @@ app.post('/api/analyze', async (req, res) => {
       score: sentimentResult.score,
       topic,
       urgency,
+      tips,
       analyzedAt: new Date().toISOString()
     });
   } catch (error) {
@@ -369,6 +422,7 @@ app.get('/api/dataset/batch', async (req, res) => {
       const sentimentResult = await analyzeSentiment(reviewBody);
       const topic = detectTopic(`${headline} ${reviewBody} ${productName}`);
       const urgency = detectUrgency(sentimentResult.label, sentimentResult.score, `${headline} ${reviewBody}`, rating);
+      const tips = generateImprovementTips(topic, sentimentResult.label, `${headline} ${reviewBody}`, urgency);
 
       processed.push({
         id: i + 1,
@@ -380,6 +434,7 @@ app.get('/api/dataset/batch', async (req, res) => {
         score: sentimentResult.score,
         topic,
         urgency,
+        tips,
         groundTruth
       });
     }
@@ -425,6 +480,7 @@ app.post('/api/upload-dataset', upload.single('dataset'), async (req, res) => {
       const sentimentResult = await analyzeSentiment(reviewBody);
       const topic = detectTopic(`${headline} ${reviewBody} ${productName}`);
       const urgency = detectUrgency(sentimentResult.label, sentimentResult.score, `${headline} ${reviewBody}`, rating);
+      const tips = generateImprovementTips(topic, sentimentResult.label, `${headline} ${reviewBody}`, urgency);
 
       processed.push({
         id: i + 1,
@@ -436,6 +492,7 @@ app.post('/api/upload-dataset', upload.single('dataset'), async (req, res) => {
         score: sentimentResult.score,
         topic,
         urgency,
+        tips,
         groundTruth
       });
     }
@@ -454,6 +511,49 @@ app.post('/api/upload-dataset', upload.single('dataset'), async (req, res) => {
     res.status(500).json({ error: 'Failed to process uploaded CSV: ' + error.message });
   }
 });
+
+// AI Chatbot Assistant Endpoint
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Please provide a message or review text to analyze.' });
+    }
+
+    const cleanText = message.trim();
+    const sentimentResult = await analyzeSentiment(cleanText);
+    const topic = detectTopic(cleanText);
+    const urgency = detectUrgency(sentimentResult.label, sentimentResult.score, cleanText);
+    const tips = generateImprovementTips(topic, sentimentResult.label, cleanText, urgency);
+
+    let reply = '';
+    const scorePct = Math.round(sentimentResult.score * 100);
+
+    if (sentimentResult.label === 'NEGATIVE') {
+      reply = `Classified as **NEGATIVE** (${scorePct}% confidence). Urgency is marked as **${urgency}** under category **"${topic}"**.\n\nRecommended engineering & QA fixes:\n• ${tips.join('\n• ')}`;
+    } else if (sentimentResult.label === 'POSITIVE') {
+      reply = `Classified as **POSITIVE** (${scorePct}% confidence). Urgency is **Low** under category **"${topic}"**.\n\nKey takeaways:\n• ${tips.join('\n• ')}`;
+    } else {
+      reply = `Classified as **NEUTRAL / MODERATE** (${scorePct}% confidence). Urgency is **${urgency}** under category **"${topic}"**.\n\nSuggested enhancements:\n• ${tips.join('\n• ')}`;
+    }
+
+    res.json({
+      success: true,
+      reply,
+      analysis: {
+        sentiment: sentimentResult.label,
+        score: sentimentResult.score,
+        topic,
+        urgency,
+        tips
+      }
+    });
+  } catch (error) {
+    console.error('Chat API error:', error);
+    res.status(500).json({ error: 'Failed to process chat request: ' + error.message });
+  }
+});
+
 
 // Start listening
 app.listen(PORT, () => {
