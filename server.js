@@ -226,7 +226,7 @@ app.post('/api/auth/login', (req, res) => {
       return res.status(400).json({ error: 'Phone number must be exactly 10 digits.' });
     }
   } else {
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanId);
+    const isEmail = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(cleanId);
     if (!isEmail) {
       return res.status(400).json({ error: 'Please enter a valid email address or 10-digit phone number.' });
     }
@@ -256,6 +256,11 @@ app.post('/api/auth/login', (req, res) => {
 app.post('/api/auth/signup', (req, res) => {
   const { name, identifier, password } = req.body;
   const cleanId = (identifier || '').trim();
+  const displayName = (name || '').trim();
+
+  if (displayName.length < 2) {
+    return res.status(400).json({ error: 'Please enter your full name.' });
+  }
 
   if (!cleanId || !password) {
     return res.status(400).json({ error: 'Please enter your email or 10-digit phone number and a password.' });
@@ -268,7 +273,7 @@ app.post('/api/auth/signup', (req, res) => {
       return res.status(400).json({ error: 'Phone number must be exactly 10 digits.' });
     }
   } else {
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanId);
+    const isEmail = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(cleanId);
     if (!isEmail) {
       return res.status(400).json({ error: 'Please enter a valid email address or 10-digit phone number.' });
     }
@@ -278,10 +283,6 @@ app.post('/api/auth/signup', (req, res) => {
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
   }
-
-  const displayName = name && name.trim() ? name.trim() : (
-    cleanId.includes('@') ? cleanId.split('@')[0] : 'User ' + cleanId.slice(-4)
-  );
 
   res.json({
     success: true,
