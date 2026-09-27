@@ -88,3 +88,17 @@ If you set a different `PORT`, replace `3000` in these URLs with that port.
 - The admin page and its API endpoints are not protected by authentication. Run this project only in a trusted local or development environment; do not expose it publicly without adding access controls.
 - The login and sign-up routes are demonstration flows and do not validate passwords against stored credentials.
 - CSV batch processing expects review text columns such as `Summary`, `Review`, or `text`; uploaded files are limited to 25 MB, and batch analysis processes at most 30 rows per request.
+## 🚀 Live Demo & Deployment
+
+This project is deployed and live on **SnapDeploy**:
+
+* **Live URL:** [https://princetnew-036c8.containers.snapdeploy.app](https://princetnew-036c8.containers.snapdeploy.app)
+* **Status:** Active (Hosted on Container Infrastructure)
+
+> **Note:** The application uses auto-sleep to optimize compute resources. If the link takes 30-60 seconds to respond on your first visit, the container is waking up automatically.
+
+### 🛠 Deployment Architecture & Specs
+* **Platform:** SnapDeploy Containers
+* **Runtime Environment:** Node.js v18 / Python 3.10
+* **Container Build:** Built from source using Docker (`npm install sqlite3 --build-from-source`)
+* **Environment Configuration:** API integration via Hugging Face & Gemini secrets
